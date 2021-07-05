@@ -28,7 +28,7 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](htt
 
 ## Deploy to Heroku (The Easy Way)
 
-<p><a href="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayerV2"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayer/tree/V2.0"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
 NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deploying!
 
 ## Heroku Vars:
