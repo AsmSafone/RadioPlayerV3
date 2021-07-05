@@ -1,0 +1,23 @@
+# vim
+[._]*.sw[a-p]
+
+# python
+/venv/
+__pycache__/
+
+# Pyrogram
+/*.py
+!/main.py
+!/userbot.py
+!/generate-pyrogram-session-string.py
+/*.ini
+/*.session
+/*.session-journal
+/downloads/
+
+# pytgcalls
+/*.so
+/*.log
+
+# Pycharm
+/.idea/
