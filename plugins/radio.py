@@ -1,6 +1,6 @@
 """
-RadioPlayerV2, Telegram Voice Chat Userbot
-Copyright (C) 2021  Asm Safone
+RadioPlayer, Telegram Voice Chat Bot
+Copyright (c) 2021  Asm Safone
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -18,23 +18,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 from pyrogram import Client, filters, emoji
 from pyrogram.types import Message
-from utils.vc import mp, RADIO
+from utils import mp, RADIO, USERNAME
 from config import Config
-STREAM_URL=Config.STREAM_URL
+from config import STREAM
+
+CHAT=Config.CHAT
 ADMINS=Config.ADMINS
 
-@Client.on_message(filters.command("radio") & filters.user(ADMINS))
+@Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
 async def radio(client, message: Message):
     if 1 in RADIO:
-        await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream By /stopradio Command!**")
+        k=await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream By /stopradio Command!**")
+        await mp.delete(k)
+        await message.delete()
         return
     await mp.start_radio()
-    await message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **Radio Stream Started :** \n<code>{STREAM_URL}</code>")
+    k=await message.reply_text(f"{emoji.CHECK_MARK_BUTTON} **Radio Stream Started :** \n<code>{STREAM}</code>")
+    await mp.delete(k)
+    await message.delete()
 
-@Client.on_message(filters.command("stopradio") & filters.user(ADMINS))
+@Client.on_message(filters.command(["stopradio", f"stopradio@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
 async def stop(_, message: Message):
     if 0 in RADIO:
-        await message.reply_text(f"{emoji.ROBOT} **Please Start A Radio Stream First By /radio Command!**")
+        k=await message.reply_text(f"{emoji.ROBOT} **Please Start A Radio Stream First By /radio Command!**")
+        await mp.delete(k)
+        await message.delete()
         return
     await mp.stop_radio()
-    await message.reply_text(f"{emoji.CROSS_MARK_BUTTON} **Radio Stream Ended Successfully!**")
+    k=await message.reply_text(f"{emoji.CROSS_MARK_BUTTON} **Radio Stream Ended Successfully!**")
+    await mp.delete(k)
+    await message.delete()

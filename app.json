@@ -1,17 +1,18 @@
 {
-  "name": "Telegram Radio Player V2",
-  "description": "An Telegram Bot Maded By Safone to Play Nonstop Radio/Music in Telegram Voice Chats",
-  "repository": "https://github.com/AsmSafone/RadioPlayerV2",
+  "name": "Telegram Radio Player V3",
+  "description": "An Telegram Bot By Safone to Play Nonstop Radio/Music/YouTube Live in Telegram Voice Chats",
+  "repository": "https://github.com/AsmSafone/RadioPlayer",
   "logo": "https://telegra.ph/file/a3755d9cb09f1361e3ac7.jpg",
   "keywords": [
     "telegram",
-    "radiov2",
+    "bot",
     "voicechat",
-    "music",
     "radio",
+    "music",
+    "python",
     "pyrogram",
     "pytgcalls",
-    "tgcalls",
+    "vcradio",
     "radioplayer"
   ],
   "env": {
@@ -32,7 +33,7 @@
       "required": true
     },
     "CHAT": {
-      "description": "ID of Channel or Group where the Bot plays Radio/Music",
+      "description": "ID of Channel or Group where the Bot plays Radio/Music/YouTube Lives",
       "required": true
     },
     "LOG_GROUP": {
@@ -43,11 +44,32 @@
       "description": "ID of Users who can use Admin commands (for multiple users seperated by space)",
       "required": true
     },
-    "STREAM_URL": {
-      "description": "URL of Radio station to stream when the bot starts",
-      "value": "https://radioindia.net/radio/hungamanow/icecast.audio",
+    "ADMIN_ONLY": {
+      "description": "Change it to 'Y' If you want to make /play commands only for admins of CHAT. By default /play is available for all.",
+      "value": "N",
       "required": false
-}
+    },
+    "MAXIMUM_DURATION": {
+      "description": "Maximum duration of song to be played using /play command",
+      "value": "15",
+      "required": false
+    },
+    "STREAM_URL": {
+      "description": "URL of Radio station or Youtube Live video url to stream with /radio command",
+      "value": "https://youtu.be/13fH5FIs4ok",
+      "required": true
+    },
+    "REPLY_MESSAGE": {
+      "description": "A reply message to those who message the USER account in PM. Make it blank if you do not need this feature.",
+      "value": "Hello Sir, I'm a bot to play radio/music/youtube live, not having time to chat with you 😂!",
+      "required": false
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "free"
+    }
   },
   "buildpacks": [
     {

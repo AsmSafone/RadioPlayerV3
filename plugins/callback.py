@@ -1,6 +1,6 @@
 """
-RadioPlayerV2, Telegram Voice Chat Userbot
-Copyright (C) 2021  Asm Safone
+RadioPlayer, Telegram Voice Chat Bot
+Copyright (c) 2021  Asm Safone
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -16,42 +16,70 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from pyrogram import Client, emoji
-from datetime import datetime, timedelta
-from utils.vc import mp
+from utils import mp
+from config import Config
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+
+playlist=Config.playlist
+
+HELP = """
+🎧 **Need Help ?** 
+__(Join @SafoTheBot For Support)__
+
+🏷️ **Common Commands** :
+
+\u2022 `/play` - reply to an audio or youTube link to play it or use /play [song name]
+\u2022 `/help` - shows help for commands
+\u2022 `/playlist` - shows the current playlist
+\u2022 `/current` - shows playing time of current track
+\u2022 `/song` [song name] - download the song as audio track
+
+🏷️ **Admin Commands** :
+
+\u2022 `/skip` [n] - skip current or n where n >= 2
+\u2022 `/join` - join the voice chat
+\u2022 `/leave` - leave the voice chat
+\u2022 `/stop` - stop playing music
+\u2022 `/radio` - start radio stream
+\u2022 `/stopradio` - stop radio stream
+\u2022 `/replay` - play from the beginning
+\u2022 `/clean` - remove unused RAW PCM files
+\u2022 `/pause` - pause playing music
+\u2022 `/resume` - resume playing music
+\u2022 `/mute` - mute the vc userbot
+\u2022 `/unmute` - unmute the vc userbot
+\u2022 `/restart` - restart the bot
+
+© **Powered By** : 
+**@AsmSafone | @SafoTheBot** 👑
+"""
+
 
 @Client.on_callback_query()
 async def cb_handler(client: Client, query: CallbackQuery):
+    if query.from_user.id not in Config.ADMINS and query.data != "help":
+        await query.answer(
+            "You're Not Allowed 🤣!",
+            show_alert=True
+            )
+        return
+    else:
+        await query.answer()
     if query.data == "replay":
         group_call = mp.group_call
-        if not mp.playlist:
+        if not playlist:
             return
         group_call.restart_playout()
-        await mp.update_start_time()
-        start_time = mp.start_time
-        playlist = mp.playlist
-        if not start_time:
-            await query.edit_message_text(f"{emoji.PLAY_BUTTON} **Nothing Playing!**")
-            return
-        utcnow = datetime.utcnow().replace(microsecond=0)
-        if mp.msg.get('current') is not None:
-            playlist=mp.playlist
-            if not playlist:
-                pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
-            else:
-                if len(playlist) == 1:
-                    pl = f"{emoji.REPEAT_SINGLE_BUTTON} **Playlist**:\n"
-                else:
-                    pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n"
-                pl += "\n".join([
-                    f"**{i}**. **{x.audio.title}**"
-                    for i, x in enumerate(playlist)
-                    ])
-            await mp.msg['current'].delete()
-            mp.msg['current'] = await playlist[0].reply_text(
-                f"{pl}\n\n{emoji.PLAY_BUTTON}  {utcnow - start_time} / "
-                f"{timedelta(seconds=playlist[0].audio.duration)}",
+        if not playlist:
+            pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
+        else:
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                for i, x in enumerate(playlist)
+                ])
+        await query.edit_message_text(
+                f"{pl}",
                 parse_mode="Markdown",
                 reply_markup=InlineKeyboardMarkup(
                     [
@@ -66,21 +94,15 @@ async def cb_handler(client: Client, query: CallbackQuery):
             )
 
     elif query.data == "pause":
-        mp.group_call.pause_playout()
-        await mp.update_start_time(reset=True)
-        playlist = mp.playlist
         if not playlist:
-            pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
+            return
         else:
-            if len(playlist) == 1:
-                pl = f"{emoji.REPEAT_SINGLE_BUTTON} **Playlist**:\n"
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n"
-            pl += "\n".join([
-                f"**{i}**. **{x.audio.title}**"
+            mp.group_call.pause_playout()
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
-        reply = await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Paused Playing!**\n\n{pl}",
+        await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Paused !**\n\n{pl}",
         reply_markup=InlineKeyboardMarkup(
                     [
                         [
@@ -93,22 +115,16 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 )
             )
 
-    
-    elif query.data == "resume":
-        mp.group_call.resume_playout()
-        playlist=mp.playlist
+    elif query.data == "resume":   
         if not playlist:
-            pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
+            return
         else:
-            if len(playlist) == 1:
-                pl = f"{emoji.REPEAT_SINGLE_BUTTON} **Playlist**:\n"
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n"
-            pl += "\n".join([
-                f"**{i}**. **{x.audio.title}**"
+            mp.group_call.resume_playout()
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
-        await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Resumed Playing!**\n\n{pl}",
+        await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Resumed !**\n\n{pl}",
         reply_markup=InlineKeyboardMarkup(
                     [
                         [
@@ -121,23 +137,17 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 )
             )
 
-    elif query.data=="skip":
-        playlist = mp.playlist
-        await mp.skip_current_playing()
+    elif query.data=="skip":   
         if not playlist:
-            pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
+            return
         else:
-            if len(playlist) == 1:
-                pl = f"{emoji.REPEAT_SINGLE_BUTTON} **Playlist**:\n"
-            else:
-                pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n"
-            pl += "\n".join([
-                f"**{i}**. **{x.audio.title}**"
+            await mp.skip_current_playing()
+            pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
+                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
-
         try:
-            await query.edit_message_text(f"⏭ **Skipped Track!**\n\n{pl}",
+            await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Skipped !**\n\n{pl}",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
@@ -152,16 +162,26 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             pass
     elif query.data=="help":
-        await query.edit_message_text("🙋‍♂️ **Hi Bruh**, \nJust Send Me An Audio File To Play. You Can Use @SafoneMusicBot To Get Audio Files! 😌\n\nCheck /help To Know More ...",
-        reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton("Close 🔐", callback_data="close"),
-                    ],
-                ]
-            )
+        buttons = [
+            [
+                InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+            ],
+            [
+                InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+            ],
+            [
+                InlineKeyboardButton("CLOSE 🔐", callback_data="close"),
+            ]
+            ]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        await query.edit_message_text(
+            HELP,
+            reply_markup=reply_markup
+
         )
-        
+
     elif query.data=="close":
         await query.message.delete()
 

@@ -1,6 +1,6 @@
 """
-RadioPlayerV2, Telegram Voice Chat Userbot
-Copyright (C) 2021  Asm Safone
+RadioPlayer, Telegram Voice Chat Bot
+Copyright (c) 2021  Asm Safone
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -16,13 +16,12 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
-from pyrogram import Client, filters
-
+import os
 import youtube_dl
 from youtube_search import YoutubeSearch
 import requests
+from pyrogram import Client, filters
 
-import os
 
 ## Extra Fns -------------------------------
 
@@ -40,7 +39,7 @@ def a(client, message):
     for i in message.command[1:]:
         query += ' ' + str(i)
     print(query)
-    m = message.reply('`Searching... Please Wait...`')
+    m = message.reply('🔍 **Searching On YouTube ...**')
     ydl_opts = {"format": "bestaudio[ext=m4a]"}
     try:
         results = []
@@ -79,7 +78,7 @@ def a(client, message):
         )
         print(str(e))
         return
-    m.edit("`Uploading... Please Wait...`")
+    m.edit("👀 **Uploading Your Song ... **")
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=False)

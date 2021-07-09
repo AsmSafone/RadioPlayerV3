@@ -1,6 +1,6 @@
 """
-RadioPlayerV2, Telegram Voice Chat Userbot
-Copyright (C) 2021  Asm Safone
+RadioPlayer, Telegram Voice Chat Bot
+Copyright (c) 2021  Asm Safone
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -16,28 +16,34 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
-
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+import os
+import sys
+import signal
 from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from utils import USERNAME, FFMPEG_PROCESSES, mp
+from config import Config
 
-
-
-HOME_TEXT = "👋🏻 **Hi [{}](tg://user?id={})**,\n\nI'm **Radio Player Bot** \nI Can Play Radio/Stream Music In Channels & Groups 24x7 Nonstop. Made with ❤️ By @AsmSafone!"
-HELP = """🏷️ **Need Help?** 🤔
+CHAT=Config.CHAT
+msg=Config.msg
+HOME_TEXT = "👋🏻 **Hi [{}](tg://user?id={})**,\n\nI'm **Radio Player V3.0** \nI Can Play Radio / Music / YouTube Live In Channel & Group 24x7 Nonstop. Made with ❤️ By @AsmSafone 😉!"
+HELP_TEXT = """
+🎧 **Need Help ?** 
 __(Join @SafoTheBot For Support)__
 
-🏷️ **Common Commands**:
-\u2022 `/play` - reply to an audio to play or queue it
-\u2022 `/help` - shows help for commands
-\u2022 `/playlist` - shows the playlist
-\u2022 `/current` - shows playing time of current track
-\u2022 `/song` [song name] - download the song as audio
+🏷️ **Common Commands** :
 
-🏷️ **Admin Commands**:
+\u2022 `/play` - reply to an audio or youTube link to play it or use /play [song name]
+\u2022 `/help` - shows help for commands
+\u2022 `/playlist` - shows the current playlist
+\u2022 `/current` - shows playing time of current track
+\u2022 `/song` [song name] - download the song as audio track
+
+🏷️ **Admin Commands** :
+
 \u2022 `/skip` [n] - skip current or n where n >= 2
-\u2022 `/join` - join voice chat of current group
-\u2022 `/leave` - leave current voice chat
-\u2022 `/vc` - check which VC is joined
+\u2022 `/join` - join the voice chat
+\u2022 `/leave` - leave the voice chat
 \u2022 `/stop` - stop playing music
 \u2022 `/radio` - start radio stream
 \u2022 `/stopradio` - stop radio stream
@@ -45,35 +51,63 @@ __(Join @SafoTheBot For Support)__
 \u2022 `/clean` - remove unused RAW PCM files
 \u2022 `/pause` - pause playing music
 \u2022 `/resume` - resume playing music
-\u2022 `/mute` - mute the VC userbot
-\u2022 `/unmute` - unmute the VC userbot
+\u2022 `/mute` - mute the vc userbot
+\u2022 `/unmute` - unmute the vc userbot
 \u2022 `/restart` - restart the bot
 
-🏷️ **Developer: @I_Am_Only_One_1** 👑
+© **Powered By** : 
+**@AsmSafone | @SafoTheBot** 👑
 """
 
 
-@Client.on_message(filters.command('start'))
+@Client.on_message(filters.command(["start", f"start@{USERNAME}"]))
 async def start(client, message):
     buttons = [
-        [
-        InlineKeyboardButton('CHANNEL', url='https://t.me/AsmSafone'),
-        InlineKeyboardButton('SUPPORT', url='https://t.me/SafoTheBot'),
-    ],
-    [
-        InlineKeyboardButton('MORE BOTS', url='https://t.me/AsmSafone/173'),
-        InlineKeyboardButton('SOURCE CODE', url='https://github.com/AsmSafone/RadioPlayerV2'),
-    ],
-    [
-        InlineKeyboardButton('⚙️ HELP ⚙️', callback_data='help'),
-        
-    ]
-    ]
+            [
+                InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+            ],
+            [
+                InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+            ],
+            [
+                InlineKeyboardButton("❔ HOW TO USE ❔", callback_data="help"),
+            ]
+            ]
     reply_markup = InlineKeyboardMarkup(buttons)
-    await message.reply(HOME_TEXT.format(message.from_user.first_name, message.from_user.id), reply_markup=reply_markup)
+    m=await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HOME_TEXT.format(message.from_user.first_name, message.from_user.id), reply_markup=reply_markup)
+    await mp.delete(m)
+    await message.delete()
 
 
 
-@Client.on_message(filters.command("help"))
+@Client.on_message(filters.command(["help", f"help@{USERNAME}"]))
 async def show_help(client, message):
-    await message.reply_text(HELP)
+    buttons = [
+            [
+                InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+            ],
+            [
+                InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+            ],
+            [
+                InlineKeyboardButton("CLOSE 🔐", callback_data="close"),
+            ]
+            ]
+    reply_markup = InlineKeyboardMarkup(buttons)
+    if msg.get('help') is not None:
+        await msg['help'].delete()
+    msg['help'] = await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HELP_TEXT, reply_markup=reply_markup)
+    await message.delete()
+@Client.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(Config.ADMINS) & (filters.chat(CHAT) | filters.private))
+async def restart(client, message):
+    await message.reply_text("🔄 **Restarting... Join @AsmSafone!**")
+    await message.delete()
+    process = FFMPEG_PROCESSES.get(CHAT)
+    if process:
+        process.send_signal(signal.SIGTERM) 
+    os.execl(sys.executable, sys.executable, *sys.argv)
+    
