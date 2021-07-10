@@ -1,17 +1,11 @@
-FROM python:latest
+FROM debian:latest
 
-ENV VIRTUAL_ENV "/venv"
-RUN python -m venv $VIRTUAL_ENV
-ENV PATH "$VIRTUAL_ENV/bin:$PATH"
-
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y ffmpeg opus-tools bpm-tools
-RUN python -m pip install --upgrade pip
-RUN python -m pip install wheel Pyrogram TgCrypto psutil
-RUN python -m pip install pytgcalls ffmpeg-python requests
-RUN python -m pip install wget youtube-dl youtube_search youtube_search_python
-
-RUN wget -q https://github.com/AsmSafone/RadioPlayer/archive/V3.0.tar.gz && tar xf V3.0.tar.gz && rm V3.0.tar.gz
-
-WORKDIR /RadioPlayer-V3.0
+RUN apt update && apt upgrade -y
+RUN apt install git curl python3-pip ffmpeg -y
+RUN pip3 install -U pip
+RUN cd /
+RUN git clone -b V3.0 https://github.com/AsmSafone/RadioPlayer
+RUN cd RadioPlayer
+WORKDIR /RadioPlayer
+RUN pip3 install -U -r requirements.txt
 CMD python3 main.py

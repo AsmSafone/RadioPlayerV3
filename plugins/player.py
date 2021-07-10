@@ -128,7 +128,7 @@ async def yplay(_, message: Message):
             pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
         else:   
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         for track in playlist[:2]:
@@ -142,11 +142,11 @@ async def yplay(_, message: Message):
             await mp.delete(k)
     if type=="youtube" or type=="query":
         if type=="youtube":
-            msg = await message.reply_text("**Searching On YouTube** ...🔍")
+            msg = await message.reply_text("🔍 **Searching ...**")
             url=yturl
         elif type=="query":
             try:
-                msg = await message.reply_text("**Searching On YouTube** ...🔍")
+                msg = await message.reply_text("🔍 **Searching ...**")
                 ytquery=ysearch
                 results = YoutubeSearch(ytquery, max_results=1).to_dict()
                 url = f"https://youtube.com{results[0]['url_suffix']}"
@@ -207,7 +207,7 @@ async def yplay(_, message: Message):
             pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
         else:
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         for track in playlist[:2]:
@@ -231,7 +231,7 @@ async def current(_, m: Message):
         return
     else:
         pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-            f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+            f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
             for i, x in enumerate(playlist)
             ])
     if m.chat.type == "private":
@@ -284,7 +284,7 @@ async def skip_track(_, m: Message):
             pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
         else:
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-            f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+            f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
             for i, x in enumerate(playlist)
             ])
         if m.chat.type == "private":
@@ -313,7 +313,7 @@ async def skip_track(_, m: Message):
                 pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
             else:
                 pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                    f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                    f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                     for i, x in enumerate(playlist)
                     ])
             if m.chat.type == "private":
@@ -486,7 +486,7 @@ async def show_playlist(_, m: Message):
         return
     else:
         pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-            f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+            f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
             for i, x in enumerate(playlist)
             ])
     if m.chat.type == "private":

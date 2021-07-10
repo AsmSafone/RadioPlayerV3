@@ -21,6 +21,7 @@ import youtube_dl
 from youtube_search import YoutubeSearch
 import requests
 from pyrogram import Client, filters
+from utils import USERNAME
 
 
 ## Extra Fns -------------------------------
@@ -33,13 +34,13 @@ def time_to_seconds(time):
 
 ## Commands --------------------------------
 
-@Client.on_message(filters.command("song") & ~filters.channel & ~filters.edited)
+@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & ~filters.channel & ~filters.edited)
 def a(client, message):
     query = ''
     for i in message.command[1:]:
         query += ' ' + str(i)
     print(query)
-    m = message.reply('🔍 **Searching On YouTube ...**')
+    m = message.reply('🔍 **Searching ...**')
     ydl_opts = {"format": "bestaudio[ext=m4a]"}
     try:
         results = []

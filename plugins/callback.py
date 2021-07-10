@@ -75,7 +75,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
         else:
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         await query.edit_message_text(
@@ -121,7 +121,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         else:
             mp.group_call.resume_playout()
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Resumed !**\n\n{pl}",
@@ -143,7 +143,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         else:
             await mp.skip_current_playing()
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
-                f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
+                f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         try:

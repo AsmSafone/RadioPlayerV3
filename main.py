@@ -55,12 +55,24 @@ bot.send(
                 description="Play Song From YouTube/Audio File"
             ),
             types.BotCommand(
+                command="radio",
+                description="Start Radio/YT Live Stream"
+            ),
+            types.BotCommand(
+                command="stopradio",
+                description="Stop Radio/YT Live Stream"
+            ),
+            types.BotCommand(
                 command="current",
                 description="Show Current Playing Song"
             ),
             types.BotCommand(
                 command="playlist",
                 description="Show The Current Playlist"
+            ),
+            types.BotCommand(
+                command="song",
+                description="Download Song As Audio File"
             ),
             types.BotCommand(
                 command="skip",
@@ -77,14 +89,6 @@ bot.send(
             types.BotCommand(
                 command="stop",
                 description="Stop Playing The Music"
-            ),
-            types.BotCommand(
-                command="radio",
-                description="Start Radio/YT Live Stream"
-            ),
-            types.BotCommand(
-                command="stopradio",
-                description="Stop Radio/YT Live Stream"
             ),
             types.BotCommand(
                 command="replay",
