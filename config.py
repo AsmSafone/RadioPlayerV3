@@ -20,6 +20,11 @@ import os
 import re
 from youtube_dl import YoutubeDL
 
+from dotenv import load_dotenv
+
+if os.path.exists(".env"):
+    load_dotenv(".env")
+
 ydl_opts = {
     "geo-bypass": True,
     "nocheckcertificate": True
