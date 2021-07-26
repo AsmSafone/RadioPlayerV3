@@ -1,6 +1,6 @@
 """
 RadioPlayer, Telegram Voice Chat Bot
-Copyright (c) 2021  Asm Safone
+Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 import os
+import time
 import youtube_dl
 from youtube_search import YoutubeSearch
 import requests

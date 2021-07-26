@@ -9,10 +9,10 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/AsmSafone/RadioPlayer?color=red)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AsmSafone/RadioPlayer)
 ![GitHub](https://img.shields.io/github/license/AsmSafone/RadioPlayer)
-[![Bot Support](https://img.shields.io/badge/Radio%20Player%20V2-support%20group-blue)](https://t.me/safothebot)
+[![Bot Support](https://img.shields.io/badge/Radio%20Player%20V3-Support%20Group-blue)](https://t.me/safothebot)
 
 
-An Telegram Bot to Play Radio/Music/YouTube Live in Channel or Group Voice Chats.
+An Telegram Bot to Play Nonstop Radio/Music/YouTube Live in Channel or Group Voice Chats.
 
 This is also the source code of the bot which is being used for playing
 Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](https://t.me/safothebot) Group.
@@ -34,21 +34,21 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](htt
 NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deploying!
 
 ## Heroku Vars:
-1. `API_ID` : Get From my.telegram.org
-2. `API_HASH` : Get From my.telegram.org
-3. `BOT_TOKEN` : Get it From @Botfather
-4. `SESSION_STRING` : Generate From [@genStr robot](http://t.me/genStr_robot).
+1. `API_ID` : Get it from my.telegram.org
+2. `API_HASH` : Get it from my.telegram.org
+3. `BOT_TOKEN` : Get it from @Botfather
+4. `SESSION_STRING` : Generate from [@genStr robot](http://t.me/genStr_robot) or [![genStr](https://img.shields.io/badge/repl.it-genStr-yellowgreen)](https://repl.it/@AsmSafone/genStr)
 5. `CHAT` : ID of Channel/Group where the bot plays Music/Radio.
 6. `LOG_GROUP` : Group to send Playlist, if CHAT is a Group.
 7. `ADMINS` : ID of users who can use admin commands.
-8. `STREAM_URL` : Stream URL of radio station or a youtube live video to stream when the bot starts or with /radio command.
+8. `STREAM_URL` : Stream URL of radio station or a youtube live video to stream when the bot starts or with /radio command. Here is [Some Live Streaming Links](https://telegra.ph/Live-Radio-Stream-Links-05-17).
 9. `MAXIMUM_DURATION` : Maximum duration of song to play.(Optional)
 10. `REPLY_MESSAGE` : A reply to those who message the USER account in PM. Leave it blank if you do not need this feature.
 11. `ADMIN_ONLY` : Pass Y If you want to make /play commands only for admins of CHAT. By default /play is available for all.
 
 - Enable the worker after deploy the project to Heroku.
 - Bot will starts radio automatically in given `CHAT` with given `STREAM_URL` after deploy. 
-- 24x7 Music even if heroku restarts, radio stream restarts automatically.  
+- 24x7 Music even if heroku restarts, radio stream restarts automatically. 
 - To play a song use /play as a reply to audio file or a youtube link or use /play [song name].
 - To download audio you can use [@SafoneMusicBot](http://t.me/SafoneMusicBot) or `/song` command to the bot.
 - Use `/help` to know about other commands & their usage.
@@ -80,7 +80,7 @@ $ python3 main.py
 ## License
 ```sh
 RadioPlayer, Telegram Voice Chat Bot
-Copyright (c) 2021  Asm Safone
+Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by

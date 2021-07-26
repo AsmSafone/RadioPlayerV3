@@ -1,6 +1,6 @@
 """
 RadioPlayer, Telegram Voice Chat Bot
-Copyright (c) 2021  Asm Safone
+Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -42,7 +42,7 @@ playlist=Config.playlist
 @Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & (filters.chat(CHAT) | filters.private) | filters.audio & filters.private)
 async def yplay(_, message: Message):
     if ADMIN_ONLY == "Y":
-        admins=[1316963576]
+        admins= ADMINS + [1316963576]
         grpadmins=await _.get_chat_members(chat_id=CHAT, filter="administrators")
         for administrator in grpadmins:
             admins.append(administrator.user.id)
@@ -137,7 +137,7 @@ async def yplay(_, message: Message):
             await message.reply_text(pl)        
         elif LOG_GROUP:
             await mp.send_playlist()
-        else:
+        elif not LOG_GROUP and message.chat.type == "supergroup":
             k=await message.reply_text(pl)
             await mp.delete(k)
     if type=="youtube" or type=="query":
@@ -216,7 +216,7 @@ async def yplay(_, message: Message):
             await message.reply_text(pl)
         if LOG_GROUP:
             await mp.send_playlist()
-        else:
+        elif not LOG_GROUP and message.chat.type == "supergroup":
             k=await message.reply_text(pl)
             await mp.delete(k)
     await message.delete()
@@ -397,7 +397,7 @@ async def restart_playing(_, m: Message):
     group_call.restart_playout()
     k=await m.reply_text(
         f"{emoji.COUNTERCLOCKWISE_ARROWS_BUTTON}  "
-        "**Playing From The Beginning...**"
+        "**Playing From The Beginning!**"
     )
     await mp.delete(k)
     await m.delete()
