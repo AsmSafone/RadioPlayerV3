@@ -18,7 +18,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 import os
 import sys
-import signal
+import subprocess
+import asyncio
+from signal import SIGINT
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils import USERNAME, FFMPEG_PROCESSES, mp
@@ -47,6 +49,7 @@ __(Join @SafoTheBot For Support)__
 \u2022 `/stop` - stop playing music
 \u2022 `/radio` - start radio stream
 \u2022 `/stopradio` - stop radio stream
+\u2022 `/volume` - change volume (0-200)
 \u2022 `/replay` - play from the beginning
 \u2022 `/clean` - remove unused RAW PCM files
 \u2022 `/pause` - pause playing music
@@ -78,7 +81,7 @@ async def start(client, message):
     reply_markup = InlineKeyboardMarkup(buttons)
     m=await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HOME_TEXT.format(message.from_user.first_name, message.from_user.id), reply_markup=reply_markup)
     await mp.delete(m)
-    await message.delete()
+    await mp.delete(message)
 
 
 
@@ -101,13 +104,20 @@ async def show_help(client, message):
     if msg.get('help') is not None:
         await msg['help'].delete()
     msg['help'] = await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HELP_TEXT, reply_markup=reply_markup)
-    await message.delete()
+    await mp.delete(message)
 @Client.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(Config.ADMINS) & (filters.chat(CHAT) | filters.private))
 async def restart(client, message):
     await message.reply_text("🔄 **Restarting... Join @AsmSafone!**")
-    await message.delete()
+    await mp.delete(message)
     process = FFMPEG_PROCESSES.get(CHAT)
     if process:
-        process.send_signal(signal.SIGTERM) 
+        try:
+            process.send_signal(SIGINT)
+        except subprocess.TimeoutExpired:
+            process.kill()
+        except Exception as e:
+            print(e)
+            pass
+        FFMPEG_PROCESSES[CHAT] = ""
     os.execl(sys.executable, sys.executable, *sys.argv)
     

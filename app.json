@@ -45,8 +45,8 @@
       "required": true
     },
     "ADMIN_ONLY": {
-      "description": "Change it to 'Y' If you want to make /play commands only for admins of CHAT. By default /play is available for all.",
-      "value": "N",
+      "description": "Change it to 'True' If you want to make /play commands only for admins of CHAT. By default /play is available for all.",
+      "value": "False",
       "required": false
     },
     "MAXIMUM_DURATION": {
@@ -56,8 +56,8 @@
     },
     "STREAM_URL": {
       "description": "URL of Radio station or Youtube Live video url to stream with /radio command",
-      "value": "https://youtu.be/13fH5FIs4ok",
-      "required": true
+      "value": "https://youtu.be/tYccXftAMVM",
+      "required": false
     },
     "REPLY_MESSAGE": {
       "description": "A reply message to those who message the USER account in PM. Make it blank if you do not need this feature.",

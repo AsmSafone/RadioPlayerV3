@@ -71,6 +71,10 @@ bot.send(
                 description="Show The Current Playlist"
             ),
             types.BotCommand(
+                command="volume",
+                description="Set Voice Chat Volume (0-200)"
+            ),
+            types.BotCommand(
                 command="song",
                 description="Download Song As Audio File"
             ),

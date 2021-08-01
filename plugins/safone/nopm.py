@@ -23,7 +23,7 @@ from pyrogram.errors import BotInlineDisabled
 
 ADMINS=Config.ADMINS
 
-@Client.on_message(filters.private & filters.incoming & ~filters.bot & ~filters.service & ~filters.me)
+@Client.on_message(filters.private & filters.incoming & ~filters.bot & ~filters.service & ~filters.me & ~filters.edited)
 async def reply(client, message): 
     try:
         inline = await client.get_inline_bot_results(USERNAME, "SAF_ONE")
@@ -40,7 +40,6 @@ async def reply(client, message):
             except Exception as e:
                 print(e)
                 pass
-
     except Exception as e:
         print(e)
         pass

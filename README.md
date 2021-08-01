@@ -26,6 +26,7 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](htt
 - Show current playing position of the audio
 - Control with buttons and commands
 - Download songs from youtube as audio
+- Change Voice chat title to current playing song name
 - Automatically downloads audio for the first two tracks in the playlist to ensure smooth playing
 
 ## Deploy to Heroku (The Easy Way)
@@ -44,7 +45,7 @@ NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deplo
 8. `STREAM_URL` : Stream URL of radio station or a youtube live video to stream when the bot starts or with /radio command. Here is [Some Live Streaming Links](https://telegra.ph/Live-Radio-Stream-Links-05-17).
 9. `MAXIMUM_DURATION` : Maximum duration of song to play.(Optional)
 10. `REPLY_MESSAGE` : A reply to those who message the USER account in PM. Leave it blank if you do not need this feature.
-11. `ADMIN_ONLY` : Pass Y If you want to make /play commands only for admins of CHAT. By default /play is available for all.
+11. `ADMIN_ONLY` : Pass 'True' If you want to make /play commands only for admins of CHAT. By default /play is available for all.
 
 - Enable the worker after deploy the project to Heroku.
 - Bot will starts radio automatically in given `CHAT` with given `STREAM_URL` after deploy. 
