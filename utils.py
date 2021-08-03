@@ -32,7 +32,9 @@ import subprocess
 from signal import SIGINT
 from pyrogram.utils import MAX_CHANNEL_ID
 from pyrogram.raw.types import InputGroupCall
-from pyrogram.raw.functions.phone import EditGroupCallTitle
+from pyrogram.raw.functions.phone import EditGroupCallTitle, CreateGroupCall
+from random import randint
+
 
 bot = Client(
     "RadioPlayerVC",
@@ -68,6 +70,7 @@ ydl_opts = {
     "outtmpl": "downloads/%(id)s.%(ext)s",
 }
 ydl = YoutubeDL(ydl_opts)
+
 def youtube(url: str) -> str:
     info = ydl.extract_info(url, False)
     duration = round(info["duration"] / 60)
@@ -166,8 +169,6 @@ class MusicPlayer(object):
         group_call = self.group_call
         if group_call.is_connected:
             playlist.clear()   
-            group_call.input_filename = ''
-            await group_call.stop()
         process = FFMPEG_PROCESSES.get(CHAT)
         if process:
             try:
@@ -179,7 +180,6 @@ class MusicPlayer(object):
                 pass
             FFMPEG_PROCESSES[CHAT] = ""
         station_stream_url = STREAM_URL
-        group_call.input_filename = f'radio-{CHAT}.raw'
         try:
             RADIO.remove(0)
         except:
@@ -188,11 +188,13 @@ class MusicPlayer(object):
             RADIO.add(1)
         except:
             pass
-        if os.path.exists(group_call.input_filename):
-            os.remove(group_call.input_filename)
+        if os.path.exists(f'radio-{CHAT}.raw'):
+            os.remove(f'radio-{CHAT}.raw')
         # credits: https://t.me/c/1480232458/6825
-        os.mkfifo(group_call.input_filename)
-        await self.start_call()
+        os.mkfifo(f'radio-{CHAT}.raw')
+        group_call.input_filename = f'radio-{CHAT}.raw'
+        if not CALL_STATUS.get(CHAT):
+            await self.start_call()
         ffmpeg_log = open("ffmpeg.log", "w+")
         command=["ffmpeg", "-y", "-i", station_stream_url, "-f", "s16le", "-ac", "2",
         "-ar", "48000", "-acodec", "pcm_s16le", group_call.input_filename]
@@ -210,12 +212,13 @@ class MusicPlayer(object):
             await self.edit_title()
         await sleep(2)
         while True:
+            await sleep(10)
             if CALL_STATUS.get(CHAT):
                 print("Succesfully Joined !")
                 break
             else:
-                print("Connecting ...")
-                await sleep(10)
+                print("Connecting, Please Wait ...")
+                await self.start_call()
                 continue
 
 
@@ -246,7 +249,18 @@ class MusicPlayer(object):
 
     async def start_call(self):
         group_call = self.group_call
-        await group_call.start(CHAT)
+        try:
+            await group_call.start(CHAT)
+        except RuntimeError:
+            await USER.send(CreateGroupCall(
+                peer=(await USER.resolve_peer(CHAT)),
+                random_id=randint(10000, 999999999)
+                )
+                )
+            await group_call.start(CHAT)
+        except Exception as e:
+            print(e)
+            pass
 
 
     async def edit_title(self):

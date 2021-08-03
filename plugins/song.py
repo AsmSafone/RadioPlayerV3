@@ -22,10 +22,7 @@ import requests
 import youtube_dl
 from youtube_search import YoutubeSearch
 from pyrogram import Client, filters
-from utils import USERNAME
-from config import Config
-
-CHAT=Config.CHAT
+from utils import mp, USERNAME
 
 
 ## Extra Fns -------------------------------
@@ -38,8 +35,8 @@ def time_to_seconds(time):
 
 ## Commands --------------------------------
 
-@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & (filters.chat(CHAT) | filters.private))
-def a(client, message):
+@Client.on_message(filters.command(["song", f"song@{USERNAME}"]))
+def song(client, message):
     query = ''
     for i in message.command[1:]:
         query += ' ' + str(i)
@@ -50,7 +47,7 @@ def a(client, message):
         results = []
         count = 0
         while len(results) == 0 and count < 6:
-            if count>0:
+            if count > 0:
                 time.sleep(1)
             results = YoutubeSearch(query, max_results=1).to_dict()
             count += 1
@@ -89,14 +86,14 @@ def a(client, message):
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        rep = f'🏷 <b>Title:</b> <a href="{link}">{title}</a>\n⏳ <b>Duration:</b> <code>{duration}</code>\n👀 <b>Views:</b> <code>{views}</code>\n📤 <b>Uploaded By: @AsmSafone</b> 👑'
+        cap = f'🏷 <b>Title:</b> <a href="{link}">{title}</a>\n⏳ <b>Duration:</b> <code>{duration}</code>\n👀 <b>Views:</b> <code>{views}</code>\n📤 <b>Uploaded By: @AsmSafone</b> 👑'
         secmul, dur, dur_arr = 1, 0, duration.split(':')
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
-        message.reply_audio(audio_file, caption=rep, parse_mode='HTML',quote=False, title=title, duration=dur, performer=performer, thumb=thumb_name)
+        message.reply_audio(audio_file, caption=cap, parse_mode='HTML', title=title, duration=dur, performer=performer, thumb=thumb_name)
         m.delete()
-        message.delete()
+        mp.delete(message)
     except Exception as e:
         m.edit('**An Error Occured. Please Report This To @SafoTheBot !!**')
         print(e)

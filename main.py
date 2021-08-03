@@ -39,12 +39,13 @@ async def main():
 
 bot.run(main())
 bot.start()
+print("\n\nRadio Player Bot Started, Join @AsmSafone!")
 bot.send(
     functions.bots.SetBotCommands(
         commands=[
             types.BotCommand(
                 command="start",
-                description="Check Alive"
+                description="Start The Bot"
             ),
             types.BotCommand(
                 command="help",
@@ -52,15 +53,27 @@ bot.send(
             ),
             types.BotCommand(
                 command="play",
-                description="Play Song From YouTube/Audio File"
+                description="Play Song From YouTube"
+            ),
+            types.BotCommand(
+                command="song",
+                description="Download Song As Audio"
+            ),
+            types.BotCommand(
+                command="pause",
+                description="Pause The Current Song"
+            ),
+            types.BotCommand(
+                command="resume",
+                description="Resume The Paused Song"
             ),
             types.BotCommand(
                 command="radio",
-                description="Start Radio/YT Live Stream"
+                description="Start Radio / Live Stream"
             ),
             types.BotCommand(
                 command="stopradio",
-                description="Stop Radio/YT Live Stream"
+                description="Stop Radio / Live Stream"
             ),
             types.BotCommand(
                 command="current",
@@ -72,11 +85,7 @@ bot.send(
             ),
             types.BotCommand(
                 command="volume",
-                description="Set Voice Chat Volume (0-200)"
-            ),
-            types.BotCommand(
-                command="song",
-                description="Download Song As Audio File"
+                description="Change Voice Chat Volume"
             ),
             types.BotCommand(
                 command="skip",
@@ -100,15 +109,7 @@ bot.send(
             ),
             types.BotCommand(
                 command="clean",
-                description="Clean Unused RAW Files"
-            ),
-            types.BotCommand(
-                command="pause",
-                description="Pause The Current Song"
-            ),
-            types.BotCommand(
-                command="resume",
-                description="Resume The Paused Song"
+                description="Clean Unused RAW PCM Files"
             ),
             types.BotCommand(
                 command="mute",
@@ -128,3 +129,4 @@ bot.send(
 
 idle()
 bot.stop()
+print("\n\nRadio Player Bot Stopped, Join @AsmSafone!")
