@@ -71,15 +71,6 @@ ydl_opts = {
 }
 ydl = YoutubeDL(ydl_opts)
 
-def youtube(url: str) -> str:
-    info = ydl.extract_info(url, False)
-    duration = round(info["duration"] / 60)
-    try:
-        ydl.download([url])
-    except Exception as e:
-        print(e)
-        pass
-    return path.join("downloads", f"{info['id']}.{info['ext']}")
 
 class MusicPlayer(object):
     def __init__(self):
@@ -115,6 +106,8 @@ class MusicPlayer(object):
         # remove old track from playlist
         old_track = playlist.pop(0)
         print(f"- START PLAYING: {playlist[0][1]}")
+        if EDIT_TITLE:
+            await self.edit_title()
         if LOG_GROUP:
             await self.send_playlist()
         os.remove(os.path.join(
@@ -151,7 +144,18 @@ class MusicPlayer(object):
             if song[3] == "telegram":
                 original_file = await bot.download_media(f"{song[2]}")
             elif song[3] == "youtube":
-                original_file = youtube(song[2])
+                url=song[2]
+                try:
+                    info = ydl.extract_info(url, False)
+                    ydl.download([url])
+                    original_file=path.join("downloads", f"{info['id']}.{info['ext']}")
+                except Exception as e:
+                    playlist.pop(1)
+                    print(f"Unable To Download Due To {e} & Skipped!")
+                    if len(playlist) == 1:
+                        return
+                    await self.download_audio(playlist[1])
+                    return
             else:
                 original_file=wget.download(song[2])
             ffmpeg.input(original_file).output(

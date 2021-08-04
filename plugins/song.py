@@ -18,11 +18,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 import os
 import time
+import ffmpeg
+import asyncio
+import logging
+import aiohttp
 import requests
 import youtube_dl
+from utils import USERNAME
 from youtube_search import YoutubeSearch
 from pyrogram import Client, filters
-from utils import mp, USERNAME
 
 
 ## Extra Fns -------------------------------
@@ -35,14 +39,19 @@ def time_to_seconds(time):
 
 ## Commands --------------------------------
 
-@Client.on_message(filters.command(["song", f"song@{USERNAME}"]))
-def song(client, message):
+@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & ~filters.edited)
+async def song(client, message):
     query = ''
     for i in message.command[1:]:
         query += ' ' + str(i)
     print(query)
-    m = message.reply('🔍 **Searching ...**')
-    ydl_opts = {"format": "bestaudio[ext=m4a]"}
+    k=await message.reply_text("🔍 **Searching ...**")
+    ydl_opts = {
+        "format": "bestaudio[ext=m4a]",
+        "geo-bypass": True,
+        "nocheckcertificate": True,
+        "outtmpl": "downloads/%(id)s.%(ext)s",
+        }
     try:
         results = []
         count = 0
@@ -72,30 +81,30 @@ def song(client, message):
 
         except Exception as e:
             print(e)
-            m.edit('**Found Literary Noting. Please Try Another Song or Use Correct Spelling!**')
+            await k.edit('**Found Literary Noting. Please Try Another Song or Use Correct Spelling!**')
             return
     except Exception as e:
-        m.edit(
+        await k.edit(
             "**Enter Song Name with Command**❗\nFor Example: `/song Alone Marshmellow`"
         )
         print(str(e))
         return
-    m.edit("👀 **Uploading Your Song ... **")
+    await k.edit("📥 **Downloading & Transcoding ... **")
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        cap = f'🏷 <b>Title:</b> <a href="{link}">{title}</a>\n⏳ <b>Duration:</b> <code>{duration}</code>\n👀 <b>Views:</b> <code>{views}</code>\n📤 <b>Uploaded By: @AsmSafone</b> 👑'
+        cap = f'🏷 <b>Title:</b> <a href="{link}">{title}</a>\n⏳ <b>Duration:</b> <code>{duration}</code>\n👀 <b>Views:</b> <code>{views}</code>\n🎧 <b>Requested By:</b> {message.from_user.mention()} \n📤 <b>Uploaded By: @AsmSafone</b> 👑'
         secmul, dur, dur_arr = 1, 0, duration.split(':')
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
-        message.reply_audio(audio_file, caption=cap, parse_mode='HTML', title=title, duration=dur, performer=performer, thumb=thumb_name)
-        m.delete()
-        mp.delete(message)
+        await message.reply_audio(audio_file, caption=cap, parse_mode='HTML', title=title, duration=dur, performer=performer, thumb=thumb_name)
+        await k.delete()
+        await message.delete()
     except Exception as e:
-        m.edit('**An Error Occured. Please Report This To @SafoTheBot !!**')
+        await k.edit('**An Error Occured. Please Report This To @SafoTheBot !!**')
         print(e)
     try:
         os.remove(audio_file)

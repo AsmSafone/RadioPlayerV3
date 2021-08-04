@@ -26,8 +26,10 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils import USERNAME, FFMPEG_PROCESSES, mp
 from config import Config
 
-CHAT=Config.CHAT
 msg=Config.msg
+CHAT=Config.CHAT
+ADMINS=Config.ADMINS
+
 HOME_TEXT = "👋🏻 **Hi [{}](tg://user?id={})**,\n\nI'm **Radio Player V3.0** \nI Can Play Radio / Music / YouTube Live In Channel & Group 24x7 Nonstop. Made with ❤️ By @AsmSafone 😉!"
 HELP_TEXT = """
 🎧 **Need Help ?** 
@@ -51,7 +53,7 @@ __(Join @SafoTheBot For Support)__
 \u2022 `/stopradio` - stop radio stream
 \u2022 `/volume` - change volume (0-200)
 \u2022 `/replay` - play from the beginning
-\u2022 `/clean` - remove unused RAW PCM files
+\u2022 `/clean` - remove unused raw files
 \u2022 `/pause` - pause playing music
 \u2022 `/resume` - resume playing music
 \u2022 `/mute` - mute the vc userbot
@@ -105,7 +107,8 @@ async def show_help(client, message):
         await msg['help'].delete()
     msg['help'] = await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HELP_TEXT, reply_markup=reply_markup)
     await mp.delete(message)
-@Client.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(Config.ADMINS) & (filters.chat(CHAT) | filters.private))
+
+@Client.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
 async def restart(client, message):
     await message.reply_text("🔄 **Restarting... Join @AsmSafone!**")
     await mp.delete(message)
@@ -120,4 +123,3 @@ async def restart(client, message):
             pass
         FFMPEG_PROCESSES[CHAT] = ""
     os.execl(sys.executable, sys.executable, *sys.argv)
-    

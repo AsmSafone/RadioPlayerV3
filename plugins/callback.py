@@ -46,7 +46,7 @@ __(Join @SafoTheBot For Support)__
 \u2022 `/stopradio` - stop radio stream
 \u2022 `/volume` - change volume (0-200)
 \u2022 `/replay` - play from the beginning
-\u2022 `/clean` - remove unused RAW PCM files
+\u2022 `/clean` - remove unused raw files
 \u2022 `/pause` - pause playing music
 \u2022 `/resume` - resume playing music
 \u2022 `/mute` - mute the vc userbot

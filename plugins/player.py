@@ -141,7 +141,6 @@ async def yplay(_, message: Message):
                 DEFAULT_DOWNLOAD_DIR,
                 f"{file}.raw"
             )
-
             await m_status.delete()
             print(f"- START PLAYING: {playlist[0][1]}")
         if not playlist:
@@ -153,8 +152,6 @@ async def yplay(_, message: Message):
                 ])
         if EDIT_TITLE:
             await mp.edit_title()
-        for track in playlist[:2]:
-            await mp.download_audio(track)
         if message.chat.type == "private":
             await message.reply_text(pl)        
         elif LOG_GROUP:
@@ -162,6 +159,8 @@ async def yplay(_, message: Message):
         elif not LOG_GROUP and message.chat.type == "supergroup":
             k=await message.reply_text(pl)
             await mp.delete(k)
+        for track in playlist[:2]:
+            await mp.download_audio(track)
     if type=="youtube" or type=="query":
         if type=="youtube":
             msg = await message.reply_text("🔍 **Searching ...**")
@@ -179,6 +178,8 @@ async def yplay(_, message: Message):
                 )
                 print(str(e))
                 return
+                await mp.delete(message)
+                await mp.delete(msg)
         else:
             return
         ydl_opts = {
@@ -186,7 +187,17 @@ async def yplay(_, message: Message):
             "nocheckcertificate": True
         }
         ydl = YoutubeDL(ydl_opts)
-        info = ydl.extract_info(url, False)
+        try:
+            info = ydl.extract_info(url, False)
+        except Exception as e:
+            print(e)
+            k=await msg.edit(
+                f"❌ **YouTube Download Error!** \n\nError:- {e}"
+                )
+            print(str(e))
+            await mp.delete(message)
+            await mp.delete(k)
+            return
         duration = round(info["duration"] / 60)
         title= info["title"]
         if int(duration) > DURATION_LIMIT:
@@ -194,7 +205,6 @@ async def yplay(_, message: Message):
             await mp.delete(k)
             await mp.delete(message)
             return
-
         data={1:title, 2:url, 3:"youtube", 4:user}
         playlist.append(data)
         group_call = mp.group_call
@@ -227,7 +237,6 @@ async def yplay(_, message: Message):
                 DEFAULT_DOWNLOAD_DIR,
                 f"{file}.raw"
             )
-
             await m_status.delete()
             print(f"- START PLAYING: {playlist[0][1]}")
         else:
@@ -241,8 +250,6 @@ async def yplay(_, message: Message):
                 ])
         if EDIT_TITLE:
             await mp.edit_title()
-        for track in playlist[:2]:
-            await mp.download_audio(track)
         if message.chat.type == "private":
             await message.reply_text(pl)
         if LOG_GROUP:
@@ -250,6 +257,8 @@ async def yplay(_, message: Message):
         elif not LOG_GROUP and message.chat.type == "supergroup":
             k=await message.reply_text(pl)
             await mp.delete(k)
+        for track in playlist[:2]:
+            await mp.download_audio(track)
     await mp.delete(message)
 
 
@@ -299,7 +308,7 @@ async def current(_, m: Message):
                 ]
                 )
         )
-    await m.delete()
+    await mp.delete(m)
 
 
 @Client.on_message(filters.command(["volume", f"volume@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
@@ -353,11 +362,11 @@ async def skip_track(_, m: Message):
             text = []
             for i in items:
                 if 2 <= i <= (len(playlist) - 1):
-                    audio = f"{playlist[i].audio.title}"
+                    audio = f"{playlist[i][1]}"
                     playlist.pop(i)
-                    text.append(f"{emoji.WASTEBASKET} {i}. **{audio}**")
+                    text.append(f"{emoji.WASTEBASKET} **Succesfully Skipped** - {i}. **{audio}**")
                 else:
-                    text.append(f"{emoji.CROSS_MARK} {i}")
+                    text.append(f"{emoji.CROSS_MARK} **Can't Skip First Two Song** - {i}")
             k=await m.reply_text("\n".join(text))
             await mp.delete(k)
             if not playlist:
