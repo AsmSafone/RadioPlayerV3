@@ -1,11 +1,21 @@
+#Docker Image
 FROM debian:latest
 
 RUN apt update && apt upgrade -y
+
+#Installing Requirements
 RUN apt install git curl python3-pip ffmpeg -y
+
+#Updating Pip
 RUN pip3 install -U pip
+
+#Copying Requirements
+COPY requirements.txt /requirements.txt
 RUN cd /
-RUN git clone -b V3.0 https://github.com/AsmSafone/RadioPlayer
-RUN cd RadioPlayer
-WORKDIR /RadioPlayer
 RUN pip3 install -U -r requirements.txt
-CMD python3 main.py
+RUN mkdir /RadioPlayer
+WORKDIR /RadioPlayer
+COPY start.sh /start.sh
+
+#Running Radio Player Bot
+CMD ["/bin/bash", "/start.sh"]
