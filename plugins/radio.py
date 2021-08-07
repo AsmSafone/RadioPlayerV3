@@ -29,7 +29,7 @@ ADMINS=Config.ADMINS
 @Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
 async def radio(client, message: Message):
     if 1 in RADIO:
-        k=await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream By /stopradio Command!**")
+        k=await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream!**")
         await mp.delete(k)
         await message.delete()
         return
@@ -41,7 +41,7 @@ async def radio(client, message: Message):
 @Client.on_message(filters.command(["stopradio", f"stopradio@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
 async def stop(_, message: Message):
     if 0 in RADIO:
-        k=await message.reply_text(f"{emoji.ROBOT} **Please Start A Radio Stream First By /radio Command!**")
+        k=await message.reply_text(f"{emoji.ROBOT} **Please Start A Radio Stream First!**")
         await mp.delete(k)
         await mp.delete(message)
         return

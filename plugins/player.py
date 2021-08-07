@@ -53,7 +53,7 @@ ADMINS_FILTER = filters.create(is_admin)
 
 
 
-@Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.audio))
+@Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & (filters.chat(CHAT) | filters.private) | filters.audio & filters.private)
 async def yplay(_, message: Message):
     if ADMIN_ONLY == "True":
         admins = await mp.get_admins(CHAT)
@@ -103,8 +103,7 @@ async def yplay(_, message: Message):
             await mp.delete(d)
             await mp.delete(message)
             return
-        if playlist and playlist[-1][2] \
-                == m_audio.audio.file_id:
+        if playlist and playlist[-1][2] == m_audio.audio.file_id:
             d=await message.reply_text(f"{emoji.ROBOT} **Already Added To Playlist!**")
             await mp.delete(d)
             await mp.delete(message)
@@ -159,6 +158,8 @@ async def yplay(_, message: Message):
             await mp.delete(k)
         for track in playlist[:2]:
             await mp.download_audio(track)
+
+
     if type=="youtube" or type=="query":
         if type=="youtube":
             msg = await message.reply_text("🔍 **Searching ...**")
@@ -563,7 +564,7 @@ async def notforu(_, m: Message):
     await mp.delete(k)
     await mp.delete(m)
 
-allcmd = ["play", "current", "playlist", f"play@{USERNAME}", f"current@{USERNAME}", f"playlist@{USERNAME}"] + admincmds
+allcmd = ["play", "current", "playlist", "song", f"song@{USERNAME}", f"play@{USERNAME}", f"current@{USERNAME}", f"playlist@{USERNAME}"] + admincmds
 
 @Client.on_message(filters.command(allcmd) & filters.group & ~filters.chat(CHAT))
 async def not_chat(_, m: Message):
@@ -576,5 +577,5 @@ async def not_chat(_, m: Message):
                 InlineKeyboardButton("🤖 MAKE YOUR OWN BOT 🤖", url="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
             ]
          ]
-    k=await m.reply_text("<b>You Can't Use This Bot In This Group! 🤷‍♂️ But You Can Make Your Own Bot Like This From The [Source Code](https://github.com/AsmSafone/RadioPlayer/tree/V3.0) Below!</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
+    k=await m.reply_text("<b>Sorry, You Can't Use This Bot In This Group! 🤷‍♂️ But You Can Make Your Own Bot Like This From The [Source Code](https://github.com/AsmSafone/RadioPlayer/tree/V3.0) Below 😉!</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
     await mp.delete(m)

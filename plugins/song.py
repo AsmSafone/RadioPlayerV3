@@ -20,14 +20,15 @@ import os
 import time
 import ffmpeg
 import asyncio
-import logging
 import aiohttp
 import requests
 import youtube_dl
-from utils import USERNAME
-from youtube_search import YoutubeSearch
 from pyrogram import Client, filters
+from config import Config
+from utils import USERNAME, mp
+from youtube_search import YoutubeSearch
 
+CHAT=Config.CHAT
 
 ## Extra Fns -------------------------------
 
@@ -39,25 +40,24 @@ def time_to_seconds(time):
 
 ## Commands --------------------------------
 
-@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & ~filters.edited)
+@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & (filters.chat(CHAT) | filters.private))
 async def song(client, message):
     query = ''
     for i in message.command[1:]:
         query += ' ' + str(i)
     print(query)
-    k=await message.reply_text("🔍 **Searching ...**")
+    k=await message.reply_text("🔍 **Searching Song...**")
     ydl_opts = {
         "format": "bestaudio[ext=m4a]",
         "geo-bypass": True,
-        "nocheckcertificate": True,
-        "outtmpl": "downloads/%(id)s.%(ext)s",
+        "nocheckcertificate": True
         }
     try:
         results = []
         count = 0
         while len(results) == 0 and count < 6:
             if count > 0:
-                time.sleep(1)
+                await time.sleep(1)
             results = YoutubeSearch(query, max_results=1).to_dict()
             count += 1
         # results = YoutubeSearch(query, max_results=1).to_dict()
@@ -81,15 +81,15 @@ async def song(client, message):
 
         except Exception as e:
             print(e)
-            await k.edit('**Found Literary Noting. Please Try Another Song or Use Correct Spelling!**')
+            await k.edit('❌ **Found Literary Noting! \nPlease Try Another Song or Use Correct Spelling.**')
             return
     except Exception as e:
         await k.edit(
-            "**Enter Song Name with Command**❗\nFor Example: `/song Alone Marshmellow`"
+            "❗ **Enter An Song Name!** \nFor Example: `/song Alone Marshmellow`"
         )
         print(str(e))
         return
-    await k.edit("📥 **Downloading & Transcoding ... **")
+    await k.edit("📥 **Downloading Song...**")
     try:
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=False)
@@ -100,11 +100,12 @@ async def song(client, message):
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
+        await k.edit("📤 **Uploading Song...**")
         await message.reply_audio(audio_file, caption=cap, parse_mode='HTML', title=title, duration=dur, performer=performer, thumb=thumb_name)
-        await k.delete()
-        await message.delete()
+        await mp.delete(k)
+        await mp.delete(message)
     except Exception as e:
-        await k.edit('**An Error Occured. Please Report This To @SafoTheBot !!**')
+        await k.edit(f'❌ **YouTube Download Error!** \n\nError:- {e}')
         print(e)
     try:
         os.remove(audio_file)
