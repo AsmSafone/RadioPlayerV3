@@ -1,5 +1,5 @@
 """
-RadioPlayer, Telegram Voice Chat Bot
+RadioPlayerV3, Telegram Voice Chat Bot
 Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
@@ -60,7 +60,7 @@ HELP_TEXT = """
 \u2022 `/mute` - mute the vc userbot
 \u2022 `/unmute` - unmute the vc userbot
 \u2022 `/restart` - restart the bot
-\u2022 `/update` - update the bot with upstream repo
+\u2022 `/update` - update the bot to latest
 
 © **Powered By** : 
 **@AsmSafone | @SafoTheBot** 👑
@@ -180,7 +180,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
-                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
                 InlineKeyboardButton("CLOSE 🔐", callback_data="close"),
@@ -206,7 +206,7 @@ async def start(client, message):
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
-                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
                 InlineKeyboardButton("❔ HOW TO USE ❔", callback_data="help"),
@@ -228,7 +228,7 @@ async def help(client, message):
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
-                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
                 InlineKeyboardButton("CLOSE 🔐", callback_data="close"),

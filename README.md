@@ -1,18 +1,18 @@
 # Telegram Radio Player V3
-![GitHub Repo stars](https://img.shields.io/github/stars/AsmSafone/RadioPlayer?color=blue&style=flat)
-![GitHub forks](https://img.shields.io/github/forks/AsmSafone/RadioPlayer?color=green&style=flat)
-![GitHub issues](https://img.shields.io/github/issues/AsmSafone/RadioPlayer)
-![GitHub closed issues](https://img.shields.io/github/issues-closed/AsmSafone/RadioPlayer)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/AsmSafone/RadioPlayer)
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/AsmSafone/RadioPlayer)
-![GitHub contributors](https://img.shields.io/github/contributors/AsmSafone/RadioPlayer?style=flat)
-![GitHub repo size](https://img.shields.io/github/repo-size/AsmSafone/RadioPlayer?color=red)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AsmSafone/RadioPlayer)
-![GitHub](https://img.shields.io/github/license/AsmSafone/RadioPlayer)
+![GitHub Repo stars](https://img.shields.io/github/stars/AsmSafone/RadioPlayerV3?color=blue&style=flat)
+![GitHub forks](https://img.shields.io/github/forks/AsmSafone/RadioPlayerV3?color=green&style=flat)
+![GitHub issues](https://img.shields.io/github/issues/AsmSafone/RadioPlayerV3)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/AsmSafone/RadioPlayerV3)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/AsmSafone/RadioPlayerV3)
+![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/AsmSafone/RadioPlayerV3)
+![GitHub contributors](https://img.shields.io/github/contributors/AsmSafone/RadioPlayerV3?style=flat)
+![GitHub repo size](https://img.shields.io/github/repo-size/AsmSafone/RadioPlayerV3?color=red)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AsmSafone/RadioPlayerV3)
+![GitHub](https://img.shields.io/github/license/AsmSafone/RadioPlayerV3)
 [![Bot Support](https://img.shields.io/badge/Radio%20Player%20V3-Support%20Group-blue)](https://t.me/safothebot)
 
 
-An Telegram Bot to Play Nonstop Radio/Music/YouTube Live in Channel or Group Voice Chats.
+An Advanced Telegram Bot to Play Nonstop Radio/Music/YouTube Live in Channel or Group Voice Chats.
 
 This is also the source code of the bot which is being used for playing
 Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](https://t.me/safothebot) Group.
@@ -31,7 +31,7 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](htt
 
 ## Deploy to Heroku (The Easy Way)
 
-<p><a href="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayer/tree/V3.0"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayerV3"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
 NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deploying!
 
 ## Heroku Vars:
@@ -62,14 +62,14 @@ NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deplo
   and a Telegram account.
 - [FFmpeg Python](https://www.ffmpeg.org/)
 - Telegram [String Session](http://t.me/genStr_robot) of the account.
-- Userbot Needs To Be Admin In The Channel or Group.
+- Userbot Needs To Be An Admin In The Channel or Group.
 - Must Start A Voice Chat In Channel/Group Before Running The Bot.
 
 ## Run On VPS (The Hard Way)
 
 ```sh
-$ git clone -b V3.0 https://github.com/AsmSafone/RadioPlayer
-$ cd RadioPlayer
+$ git clone https://github.com/AsmSafone/RadioPlayerV3
+$ cd RadioPlayerV3
 $ sudo apt-get install python3-pip ffmpeg
 $ pip3 install -U pip
 $ pip3 install -r requirements.txt
@@ -80,7 +80,7 @@ $ python3 main.py
 
 ## License
 ```sh
-RadioPlayer, Telegram Voice Chat Bot
+RadioPlayerV3, Telegram Voice Chat Bot
 Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
@@ -96,8 +96,10 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 ```
+
 ## Credits
 
-- [Me](https://github.com/AsmSafone) [Dev]
-- [Dash](https://github.com/dashezup) [Dev]
-- [Subin](https://github.com/subinps) [Dev]
+Thanks To All [Contributors](https://github.com/AsmSafone/RadioPlayerV3/graphs/contributors) & Lib Owners!
+
+## Support 
+<a href="https://t.me/safothebot"><img src="https://img.shields.io/badge/Support_Group-2cb6e0?style=for-the-badge&logo=telegram&logoColor=white"></a> <a href="https://t.me/AsmSafone"><img src="https://img.shields.io/badge/Updates_Channel-2cb6e0?style=for-the-badge&logo=telegram&logoColor=white"></a>

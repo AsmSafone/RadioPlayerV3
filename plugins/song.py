@@ -1,5 +1,5 @@
 """
-RadioPlayer, Telegram Voice Chat Bot
+RadioPlayerV3, Telegram Voice Chat Bot
 Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
@@ -50,7 +50,8 @@ async def song(client, message):
     ydl_opts = {
         "format": "bestaudio[ext=m4a]",
         "geo-bypass": True,
-        "nocheckcertificate": True
+        "nocheckcertificate": True,
+        "outtmpl": "downloads/%(id)s.%(ext)s",
         }
     try:
         results = []
@@ -105,7 +106,7 @@ async def song(client, message):
         await mp.delete(k)
         await mp.delete(message)
     except Exception as e:
-        await k.edit(f'❌ **YouTube Download Error!** \n\nError:- {e}')
+        await k.edit(f'❌ **An Error Occured!** \n\nError:- {e}')
         print(e)
     try:
         os.remove(audio_file)

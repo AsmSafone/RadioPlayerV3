@@ -1,5 +1,5 @@
 """
-RadioPlayer, Telegram Voice Chat Bot
+RadioPlayerV3, Telegram Voice Chat Bot
 Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@ ydl_opts = {
 ydl = YoutubeDL(ydl_opts)
 links=[]
 finalurl=""
-STREAM=os.environ.get("STREAM_URL", "http://stream.zenolive.com/8wv4d8g4344tv")
+STREAM=os.environ.get("STREAM_URL", "http://peridot.streamguys.com:7150/Mirchi")
 regex = r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+"
 match = re.match(regex,STREAM)
 if match:

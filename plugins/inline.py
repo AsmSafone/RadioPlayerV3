@@ -1,5 +1,5 @@
 """
-RadioPlayer, Telegram Voice Chat Bot
+RadioPlayerV3, Telegram Voice Chat Bot
 Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ buttons = [
                 InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
             ],
             [
-                InlineKeyboardButton("🤖 MAKE YOUR OWN BOT 🤖", url="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayer/tree/V3.0"),
+                InlineKeyboardButton("🤖 MAKE YOUR OWN BOT 🤖", url="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayerV3"),
             ]
          ]
 

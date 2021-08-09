@@ -1,5 +1,5 @@
 """
-RadioPlayer, Telegram Voice Chat Bot
+RadioPlayerV3, Telegram Voice Chat Bot
 Copyright (c) 2021  Asm Safone <https://github.com/AsmSafone>
 
 This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 from pyrogram import Client, filters, emoji
 from pyrogram.types import Message
 from utils import mp, RADIO, USERNAME
-from config import Config
-from config import STREAM
+from config import Config, STREAM
 
 CHAT=Config.CHAT
 ADMINS=Config.ADMINS
