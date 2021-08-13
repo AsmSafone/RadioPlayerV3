@@ -182,7 +182,6 @@ async def yplay(_, message: Message):
         else:
             return
         ydl_opts = {
-            "verbose": True,
             "geo-bypass": True,
             "nocheckcertificate": True
         }
@@ -561,7 +560,7 @@ admincmds=["join", "unmute", "mute", "leave", "clean", "pause", "resume", "stop"
 
 @Client.on_message(filters.command(admincmds) & ~ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
 async def notforu(_, m: Message):
-    k=await m.reply_sticker("CAACAgUAAxkBAAINrWDkoLqDd7q8bYQf8Iuh3xpJ3aaLAAJ_AwACNJ70MUb5SS0H9PE6HgQ")
+    k=await m.reply_sticker("CAACAgUAAxkBAAEBpyZhF4R-ZbS5HUrOxI_MSQ10hQt65QACcAMAApOsoVSPUT5eqj5H0h4E")
     await mp.delete(k)
     await mp.delete(m)
 
@@ -578,5 +577,5 @@ async def not_chat(_, m: Message):
                 InlineKeyboardButton("🤖 MAKE YOUR OWN BOT 🤖", url="https://heroku.com/deploy?template=https://github.com/AsmSafone/RadioPlayerV3"),
             ]
          ]
-    k=await m.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption="<b>Sorry, You Can't Use This Bot In This Group! 🤷‍♂️ But You Can Make Your Own Bot Like This From The [Source Code](https://github.com/AsmSafone/RadioPlayerV3) Below 😉!</b>", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup(buttons))
+    k=await m.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption="**Sorry, You Can't Use This Bot In This Group! 🤷‍♂️ But You Can Make Your Own Bot Like This From The [Source Code](https://github.com/AsmSafone/RadioPlayerV3) Below 😉!**", reply_markup=InlineKeyboardMarkup(buttons))
     await mp.delete(m)
