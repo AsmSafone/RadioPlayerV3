@@ -16,13 +16,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
-import os
-import sys
 import asyncio
-import subprocess
-from signal import SIGINT
 from pyrogram import Client, filters, emoji
-from utils import USERNAME, FFMPEG_PROCESSES, mp
+from utils import USERNAME, mp
 from config import Config
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
@@ -48,7 +44,7 @@ HELP_TEXT = """
 
 \u2022 `/radio` - start radio stream
 \u2022 `/stopradio` - stop radio stream
-\u2022 `/skip` [n] - skip current or n where n >= 2
+\u2022 `/skip` - skip current music
 \u2022 `/join` - join the voice chat
 \u2022 `/leave` - leave the voice chat
 \u2022 `/stop` - stop playing music
@@ -59,8 +55,7 @@ HELP_TEXT = """
 \u2022 `/resume` - resume playing music
 \u2022 `/mute` - mute the vc userbot
 \u2022 `/unmute` - unmute the vc userbot
-\u2022 `/restart` - restart the bot
-\u2022 `/update` - update the bot to latest
+\u2022 `/restart` - update & restart the bot
 
 © **Powered By** : 
 **@AsmSafone | @SafoTheBot** 👑
@@ -71,7 +66,7 @@ HELP_TEXT = """
 async def cb_handler(client: Client, query: CallbackQuery):
     if query.from_user.id not in Config.ADMINS and query.data != "help":
         await query.answer(
-            "You're Not Allowed 🤣!",
+            "You're Not Allowed! 🤣",
             show_alert=True
             )
         return
@@ -240,18 +235,3 @@ async def help(client, message):
     msg['help'] = await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HELP_TEXT, reply_markup=reply_markup)
     await mp.delete(message)
 
-@Client.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
-async def restart(client, message):
-    await message.reply_text("🔄 **Restarting... Please Wait!**")
-    await mp.delete(message)
-    process = FFMPEG_PROCESSES.get(CHAT)
-    if process:
-        try:
-            process.send_signal(SIGINT)
-        except subprocess.TimeoutExpired:
-            process.kill()
-        except Exception as e:
-            print(e)
-            pass
-        FFMPEG_PROCESSES[CHAT] = ""
-    os.execl(sys.executable, sys.executable, *sys.argv)
