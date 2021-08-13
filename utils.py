@@ -65,6 +65,7 @@ RADIO_TITLE=Config.RADIO_TITLE
 
 ydl_opts = {
     "format": "bestaudio[ext=m4a]",
+    "verbose": True,
     "geo-bypass": True,
     "nocheckcertificate": True,
     "outtmpl": "downloads/%(id)s.%(ext)s",

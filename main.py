@@ -65,27 +65,27 @@ bot.send(
             ),
             types.BotCommand(
                 command="play",
-                description="Play Song From YouTube"
+                description="Play Music From YouTube"
             ),
             types.BotCommand(
                 command="song",
-                description="Download Song As Audio"
+                description="Download Music As Audio"
+            ),
+            types.BotCommand(
+                command="skip",
+                description="Skip The Current Music"
             ),
             types.BotCommand(
                 command="pause",
-                description="Pause The Current Song"
+                description="Pause The Current Music"
             ),
             types.BotCommand(
                 command="resume",
-                description="Resume The Paused Song"
+                description="Resume The Paused Music"
             ),
             types.BotCommand(
                 command="radio",
                 description="Start Radio / Live Stream"
-            ),
-            types.BotCommand(
-                command="stopradio",
-                description="Stop Radio / Live Stream"
             ),
             types.BotCommand(
                 command="current",
@@ -94,14 +94,6 @@ bot.send(
             types.BotCommand(
                 command="playlist",
                 description="Show The Current Playlist"
-            ),
-            types.BotCommand(
-                command="volume",
-                description="Change Voice Chat Volume"
-            ),
-            types.BotCommand(
-                command="skip",
-                description="Skip The Current Song"
             ),
             types.BotCommand(
                 command="join",
@@ -114,6 +106,10 @@ bot.send(
             types.BotCommand(
                 command="stop",
                 description="Stop Playing The Music"
+            ),
+            types.BotCommand(
+                command="stopradio",
+                description="Stop Radio / Live Stream"
             ),
             types.BotCommand(
                 command="replay",
@@ -132,22 +128,25 @@ bot.send(
                 description="Unmute Userbot In Voice Chat"
             ),
             types.BotCommand(
-                command="update",
-                description="Update Your Bot (Owner Only)"
+                command="volume",
+                description="Change The Voice Chat Volume"
             ),
             types.BotCommand(
                 command="restart",
-                description="Restart Your Bot (Owner Only)"
+                description="Update & Restart Bot (Owner Only)"
             )
         ]
     )
 )
 
-@bot.on_message(filters.command(["update", f"update@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
+@bot.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
 async def updater(client, message):
-    k=await message.reply_text("🔄 **Updating, Please Wait...**")
+    k=await message.reply_text("🔄 **Checking Updates ...**")
     await asyncio.sleep(3)
-    await k.edit("🔄 **Successfully Updated. \nNow Restarting ...**")
+    await k.edit("🔄 **Updating, Please Wait...**")
+    await asyncio.sleep(5)
+    await k.edit("🔄 **Successfully Updated!**")
+    await k.edit("🔄 **Now Restarting ...**\n\nJoin @AsmSafone For Updates!")
     try:
         await message.delete()
     except:

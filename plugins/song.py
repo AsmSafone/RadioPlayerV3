@@ -49,6 +49,7 @@ async def song(client, message):
     k=await message.reply_text("🔍 **Searching Song...**")
     ydl_opts = {
         "format": "bestaudio[ext=m4a]",
+        "verbose": True,
         "geo-bypass": True,
         "nocheckcertificate": True,
         "outtmpl": "downloads/%(id)s.%(ext)s",
