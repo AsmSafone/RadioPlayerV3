@@ -140,12 +140,13 @@ bot.send(
 )
 
 @bot.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private))
-async def updater(client, message):
+async def restart(client, message):
     k=await message.reply_text("🔄 **Checking Updates ...**")
     await asyncio.sleep(3)
     await k.edit("🔄 **Updating, Please Wait...**")
     await asyncio.sleep(5)
     await k.edit("🔄 **Successfully Updated!**")
+    await asyncio.sleep(2)
     await k.edit("🔄 **Now Restarting ...**\n\nJoin @AsmSafone For Updates!")
     try:
         await message.delete()
