@@ -53,7 +53,7 @@ ADMINS_FILTER = filters.create(is_admin)
 
 
 
-@Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & (filters.chat(CHAT) | filters.private) | filters.audio & filters.private)
+@Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)) | filters.audio & filters.private)
 async def yplay(_, message: Message):
     if ADMIN_ONLY == "True":
         admins = await mp.get_admins(CHAT)
@@ -261,7 +261,7 @@ async def yplay(_, message: Message):
     await mp.delete(message)
 
 
-@Client.on_message(filters.command(["current", f"current@{USERNAME}"]) & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["current", f"current@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def current(_, m: Message):
     if not playlist:
         k=await m.reply_text(f"{emoji.NO_ENTRY} **Nothing Is Playing!**")
@@ -310,7 +310,7 @@ async def current(_, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["volume", f"volume@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["volume", f"volume@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def set_vol(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -329,7 +329,7 @@ async def set_vol(_, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["skip", f"skip@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["skip", f"skip@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def skip_track(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -389,7 +389,7 @@ async def skip_track(_, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["join", f"join@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["join", f"join@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def join_group_call(client, m: Message):
     group_call = mp.group_call
     if group_call.is_connected:
@@ -404,7 +404,7 @@ async def join_group_call(client, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["leave", f"leave@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["leave", f"leave@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def leave_voice_chat(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -423,7 +423,7 @@ async def leave_voice_chat(_, m: Message):
 
 
 
-@Client.on_message(filters.command(["stop", f"stop@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["stop", f"stop@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def stop_playing(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -440,7 +440,7 @@ async def stop_playing(_, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["replay", f"replay@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["replay", f"replay@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def restart_playing(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -462,7 +462,7 @@ async def restart_playing(_, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["pause", f"pause@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["pause", f"pause@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def pause_playing(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -478,7 +478,7 @@ async def pause_playing(_, m: Message):
 
 
 
-@Client.on_message(filters.command(["resume", f"resume@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["resume", f"resume@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def resume_playing(_, m: Message):
     if not mp.group_call.is_connected:
         k=await m.reply_text(f"{emoji.NO_ENTRY} **Nothing Is Paused To Resume!**")
@@ -491,7 +491,7 @@ async def resume_playing(_, m: Message):
     await mp.delete(k)
     await mp.delete(m)
 
-@Client.on_message(filters.command(["clean", f"clean@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["clean", f"clean@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def clean_raw_pcm(client, m: Message):
     download_dir = os.path.join(client.workdir, DEFAULT_DOWNLOAD_DIR)
     all_fn: list[str] = os.listdir(download_dir)
@@ -510,7 +510,7 @@ async def clean_raw_pcm(client, m: Message):
     await mp.delete(m)
 
 
-@Client.on_message(filters.command(["mute", f"mute@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["mute", f"mute@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def mute(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -523,7 +523,7 @@ async def mute(_, m: Message):
     await mp.delete(k)
     await mp.delete(m)
 
-@Client.on_message(filters.command(["unmute", f"unmute@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["unmute", f"unmute@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def unmute(_, m: Message):
     group_call = mp.group_call
     if not group_call.is_connected:
@@ -536,7 +536,7 @@ async def unmute(_, m: Message):
     await mp.delete(k)
     await mp.delete(m)
 
-@Client.on_message(filters.command(["playlist", f"playlist@{USERNAME}"]) & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(["playlist", f"playlist@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def show_playlist(_, m: Message):
     if not playlist:
         k=await m.reply_text(f"{emoji.NO_ENTRY} **Nothing Is Playing!**")
@@ -558,7 +558,7 @@ async def show_playlist(_, m: Message):
 
 admincmds=["join", "unmute", "mute", "leave", "clean", "pause", "resume", "stop", "skip", "radio", "stopradio", "replay", "restart", "volume", f"volume@{USERNAME}", f"join@{USERNAME}", f"unmute@{USERNAME}", f"mute@{USERNAME}", f"leave@{USERNAME}", f"clean@{USERNAME}", f"pause@{USERNAME}", f"resume@{USERNAME}", f"stop@{USERNAME}", f"skip@{USERNAME}", f"radio@{USERNAME}", f"stopradio@{USERNAME}", f"replay@{USERNAME}", f"restart@{USERNAME}"]
 
-@Client.on_message(filters.command(admincmds) & ~ADMINS_FILTER & (filters.chat(CHAT) | filters.private))
+@Client.on_message(filters.command(admincmds) & ~ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def notforu(_, m: Message):
     k=await m.reply_sticker("CAACAgUAAxkBAAEBpyZhF4R-ZbS5HUrOxI_MSQ10hQt65QACcAMAApOsoVSPUT5eqj5H0h4E")
     await mp.delete(k)
@@ -566,7 +566,7 @@ async def notforu(_, m: Message):
 
 allcmd = ["play", "current", "playlist", "song", f"song@{USERNAME}", f"play@{USERNAME}", f"current@{USERNAME}", f"playlist@{USERNAME}"] + admincmds
 
-@Client.on_message(filters.command(allcmd) & filters.group & ~filters.chat(CHAT))
+@Client.on_message(filters.command(allcmd) & filters.group & ~filters.chat(CHAT) & ~filters.chat(LOG_GROUP))
 async def not_chat(_, m: Message):
     buttons = [
             [

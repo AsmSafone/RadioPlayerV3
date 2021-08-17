@@ -18,23 +18,23 @@
   ],
   "env": {
     "API_ID": {
-      "description": "api_id part of your Telegram API Key from my.telegram.org/apps",
+      "description": "User Accounts Telegram API_ID get it from my.telegram.org/apps",
       "required": true
     },
     "API_HASH": {
-      "description": "api_hash part of your Telegram API Key from my.telegram.org/apps",
+      "description": "User Accounts Telegram API_HASH get it from my.telegram.org/apps",
       "required": true
     },
     "BOT_TOKEN": {
-      "description": "Bot token of Bot, get from @Botfather",
+      "description": "Your Telegram Bot Token, get it from @Botfather XD",
       "required": true
     },
     "SESSION_STRING": {
-      "description": "Session string, use @genStr_robot to generate pyrogram session string",
+      "description": "User Session String, get it from @genStr_robot. Read readme to learn more",
       "required": true
     },
     "CHAT": {
-      "description": "ID of Channel or Group where the Bot plays Radio/Music/YouTube Lives",
+      "description": "ID of your Channel or Group where the bot plays Radio/Music/YouTube Lives",
       "required": true
     },
     "LOG_GROUP": {
@@ -42,7 +42,7 @@
       "required": false
     },
     "ADMINS": {
-      "description": "ID of Users who can use Admin commands (for multiple users seperated by space)",
+      "description": "ID of Auth Users who can use Admin commands (for multiple users seperated by space)",
       "required": true
     },
     "ADMIN_ONLY": {
@@ -51,12 +51,12 @@
       "required": false
     },
     "MAXIMUM_DURATION": {
-      "description": "Maximum duration of song to be played using /play command",
+      "description": "Maximum Duration of a song to be played by using /play command",
       "value": "15",
       "required": false
     },
     "STREAM_URL": {
-      "description": "URL of Radio station or Youtube Live video url to stream with /radio command",
+      "description": "URL of Radio Station or Youtube Live video url to stream with /radio command",
       "value": "https://youtu.be/5qap5aO4i9A",
       "required": false
     },

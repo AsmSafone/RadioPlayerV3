@@ -53,35 +53,6 @@ async def _human_time_duration(seconds):
     return ', '.join(parts)
 
 
-@Client.on_message(filters.text
-                   & self_or_contact_filter
-                   & ~filters.edited
-                   & ~filters.bot
-                   & filters.regex("^.ping$"))
-async def ping_pong(_, m: Message):
-    start = time()
-    m_reply = await m.reply_text("Pong!")
-    delta_ping = time() - start
-    await m_reply.edit_text(
-        f"{emoji.ROBOT} **Ping** : `{delta_ping * 1000:.3f} ms`"
-    )
-
-
-@Client.on_message(filters.text
-                   & self_or_contact_filter
-                   & ~filters.edited
-                   & ~filters.bot
-                   & filters.regex("^.uptime$"))
-async def get_uptime(_, m: Message):
-    current_time = datetime.utcnow()
-    uptime_sec = (current_time - START_TIME).total_seconds()
-    uptime = await _human_time_duration(int(uptime_sec))
-    await m.reply_text(
-        f"{emoji.ROBOT} Radio Player V3.0\n"
-        f"- Uptime: `{uptime}`\n"
-        f"- Restarted: `{START_TIME_ISO}`"
-    )
-
 async def generate_sysinfo(workdir):
     # uptime
     info = {
@@ -133,11 +104,51 @@ async def generate_sysinfo(workdir):
             + "```")
 
 
-@Client.on_message(filters.text
-                   & self_or_contact_filter
-                   & ~filters.edited
-                   & ~filters.via_bot
-                   & filters.regex("^.sysinfo$"))
+
+@Client.on_message(
+    filters.group
+    & filters.text
+    & self_or_contact_filter
+    & ~filters.edited
+    & ~filters.bot
+    & filters.regex("^!ping$")
+    )
+async def ping_pong(_, m: Message):
+    start = time()
+    m_reply = await m.reply_text("Pong!")
+    delta_ping = time() - start
+    await m_reply.edit_text(
+        f"{emoji.ROBOT} **Ping** : `{delta_ping * 1000:.3f} ms`"
+    )
+
+
+@Client.on_message(
+    filters.group
+    & filters.text
+    & self_or_contact_filter
+    & ~filters.edited
+    & ~filters.bot
+    & filters.regex("^!uptime$")
+    )
+async def get_uptime(_, m: Message):
+    current_time = datetime.utcnow()
+    uptime_sec = (current_time - START_TIME).total_seconds()
+    uptime = await _human_time_duration(int(uptime_sec))
+    await m.reply_text(
+        f"{emoji.ROBOT} Radio Player V3.0\n"
+        f"- Uptime: `{uptime}`\n"
+        f"- Restarted: `{START_TIME_ISO}`"
+    )
+
+
+@Client.on_message(
+    filters.group
+    & filters.text
+    & self_or_contact_filter
+    & ~filters.edited
+    & ~filters.bot
+    & filters.regex("^!sysinfo$")
+    )
 async def get_sysinfo(client, m):
     response = "**System Information**:\n"
     m_reply = await m.reply_text(f"{response}`...`")
