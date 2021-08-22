@@ -25,8 +25,19 @@ CHAT=Config.CHAT
 ADMINS=Config.ADMINS
 LOG_GROUP=Config.LOG_GROUP
 
+async def is_admin(_, client, message: Message):
+    admins = await mp.get_admins(CHAT)
+    if message.from_user is None and message.sender_chat:
+        return True
+    if message.from_user.id in admins:
+        return True
+    else:
+        return False
 
-@Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+ADMINS_FILTER = filters.create(is_admin)
+
+
+@Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def radio(client, message: Message):
     if 1 in RADIO:
         k=await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream!**")
@@ -38,7 +49,7 @@ async def radio(client, message: Message):
     await mp.delete(k)
     await mp.delete(message)
 
-@Client.on_message(filters.command(["stopradio", f"stopradio@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+@Client.on_message(filters.command(["stopradio", f"stopradio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def stop(_, message: Message):
     if 0 in RADIO:
         k=await message.reply_text(f"{emoji.ROBOT} **Please Start A Radio Stream First!**")

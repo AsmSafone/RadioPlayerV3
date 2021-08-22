@@ -20,7 +20,6 @@ import os
 import time
 import ffmpeg
 import asyncio
-import aiohttp
 import requests
 import youtube_dl
 from pyrogram import Client, filters

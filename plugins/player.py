@@ -191,7 +191,7 @@ async def yplay(_, message: Message):
         except Exception as e:
             print(e)
             k=await msg.edit(
-                f"❌ **YouTube Download Error!** \n\nError:- {e}"
+                f"❌ **YouTube Download Error !** \n\n{e}"
                 )
             print(str(e))
             await mp.delete(message)
@@ -518,7 +518,7 @@ async def mute(_, m: Message):
         await mp.delete(k)
         await mp.delete(m)
         return
-    group_call.set_is_mute(True)
+    await group_call.set_is_mute(True)
     k=await m.reply_text(f"{emoji.MUTED_SPEAKER} **User Muted!**")
     await mp.delete(k)
     await mp.delete(m)
@@ -531,7 +531,7 @@ async def unmute(_, m: Message):
         await mp.delete(k)
         await mp.delete(m)
         return
-    group_call.set_is_mute(False)
+    await group_call.set_is_mute(False)
     k=await m.reply_text(f"{emoji.SPEAKER_MEDIUM_VOLUME} **User Unmuted!**")
     await mp.delete(k)
     await mp.delete(m)

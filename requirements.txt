@@ -1,13 +1,12 @@
 Pyrogram
 TgCrypto
-ffmpeg-python
 pytgcalls[pyrogram]
+ffmpeg-python
+python-dotenv
 wheel
 psutil
+wget
+requests
 youtube_dl
 youtube_search
 youtube_search_python
-wget
-aiohttp
-requests
-python-dotenv
