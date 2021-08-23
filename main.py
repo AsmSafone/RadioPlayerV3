@@ -20,6 +20,7 @@ import os
 import sys
 import asyncio
 import subprocess
+from time import sleep
 from threading import Thread
 from signal import SIGINT
 from pyrogram import Client, filters, idle
@@ -46,7 +47,8 @@ async def main():
 
 def stop_and_restart():
     bot.stop()
-    os.system("git pull")
+    os.system("git pull && pip3 install -U pytgcalls[pyrogram]")
+    sleep(10)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 
@@ -165,7 +167,11 @@ async def restart(client, message):
         FFMPEG_PROCESSES[CHAT] = ""
     Thread(
         target=stop_and_restart
-        ).start()    
+        ).start()
+    try:
+        await k.delete()
+    except:
+        pass
 
 idle()
 bot.stop()

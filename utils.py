@@ -23,9 +23,14 @@ import ffmpeg
 import asyncio
 import subprocess
 from pyrogram import emoji
+try:
+    from pytgcalls.exceptions import GroupCallNotFoundError
+except ModuleNotFoundError:
+    file=os.path.abspath("requirements.txt")
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
+    os.execl(sys.executable, sys.executable, *sys.argv)
 from pyrogram.methods.messages.download_media import DEFAULT_DOWNLOAD_DIR
 from pytgcalls import GroupCallFactory
-from pytgcalls.exceptions import GroupCallNotFoundError
 from config import Config
 from asyncio import sleep
 from pyrogram import Client
