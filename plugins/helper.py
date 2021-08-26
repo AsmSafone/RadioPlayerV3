@@ -170,6 +170,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data=="help":
         buttons = [
             [
+                InlineKeyboardButton("Search Songs Inline", switch_inline_query_current_chat=""),
+            ],
+            [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
                 InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
             ],
@@ -196,6 +199,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
 async def start(client, message):
     buttons = [
             [
+                InlineKeyboardButton("Search Songs Inline", switch_inline_query_current_chat=""),
+            ],
+            [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
                 InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
             ],
@@ -217,6 +223,9 @@ async def start(client, message):
 @Client.on_message(filters.command(["help", f"help@{USERNAME}"]))
 async def help(client, message):
     buttons = [
+            [
+                InlineKeyboardButton("Search Songs Inline", switch_inline_query_current_chat=""),
+            ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
                 InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
