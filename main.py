@@ -28,7 +28,7 @@ from config import Config
 from utils import mp, USERNAME, FFMPEG_PROCESSES
 from pyrogram.raw import functions, types
 from user import USER
-from pyrogram.errors import UserAlreadyParticipant
+from pyrogram.errors import FloodWait, UserAlreadyParticipant
 
 CHAT=Config.CHAT
 ADMINS=Config.ADMINS
@@ -49,7 +49,10 @@ async def main():
         try:
             await USER.join_chat("AsmSafone")
         except UserAlreadyParticipant:
-            pass
+            return 400
+        except FloodWait as e:
+            await asyncio.sleep(e.x)
+            return 404
         except Exception as e:
             print(e)
             pass
@@ -160,7 +163,7 @@ async def restart(client, message):
     await k.edit("🔄 **Successfully Updated!**")
     await asyncio.sleep(2)
     await k.edit("🔄 **Restarting, Please Wait...\n\nJoin @AsmSafone For Updates!**")
-
+    await asyncio.sleep(10)
     process = FFMPEG_PROCESSES.get(CHAT)
     if process:
         try:

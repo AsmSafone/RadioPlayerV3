@@ -21,6 +21,7 @@ from pyrogram import Client, filters, emoji
 from utils import USERNAME, mp
 from config import Config
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from pyrogram.errors import MessageNotModified
 
 msg=Config.msg
 CHAT=Config.CHAT
@@ -84,20 +85,23 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
-        await query.edit_message_text(
-                f"{pl}",
-                parse_mode="Markdown",
-                reply_markup=InlineKeyboardMarkup(
-                    [
+        try:
+            await query.edit_message_text(
+                    f"{pl}",
+                    parse_mode="Markdown",
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup(
                         [
-                            InlineKeyboardButton("🔄", callback_data="replay"),
-                            InlineKeyboardButton("⏸", callback_data="pause"),
-                            InlineKeyboardButton("⏭", callback_data="skip")
-                            
-                        ],
-                    ]
+                            [
+                                InlineKeyboardButton("🔄", callback_data="replay"),
+                                InlineKeyboardButton("⏸", callback_data="pause"),
+                                InlineKeyboardButton("⏩", callback_data="skip")
+                            ],
+                        ]
+                    )
                 )
-            )
+        except MessageNotModified:
+            pass
 
     elif query.data == "pause":
         if not playlist:
@@ -108,18 +112,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
-        await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Paused !**\n\n{pl}",
-        reply_markup=InlineKeyboardMarkup(
-                    [
+        try:
+            await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Paused !**\n\n{pl}",
+                    parse_mode="Markdown",
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup(
                         [
-                            InlineKeyboardButton("🔄", callback_data="replay"),
-                            InlineKeyboardButton("▶️", callback_data="resume"),
-                            InlineKeyboardButton("⏭", callback_data="skip")
-                            
-                        ],
-                    ]
+                            [
+                                InlineKeyboardButton("🔄", callback_data="replay"),
+                                InlineKeyboardButton("▶️", callback_data="resume"),
+                                InlineKeyboardButton("⏩", callback_data="skip")
+                            ],
+                        ]
+                    )
                 )
-            )
+        except MessageNotModified:
+            pass
 
     elif query.data == "resume":   
         if not playlist:
@@ -130,18 +138,22 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
-        await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Resumed !**\n\n{pl}",
-        reply_markup=InlineKeyboardMarkup(
-                    [
+        try:
+            await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Resumed !**\n\n{pl}",
+                    parse_mode="Markdown",
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup(
                         [
-                            InlineKeyboardButton("🔄", callback_data="replay"),
-                            InlineKeyboardButton("⏸", callback_data="pause"),
-                            InlineKeyboardButton("⏭", callback_data="skip")
-                            
-                        ],
-                    ]
+                            [
+                                InlineKeyboardButton("🔄", callback_data="replay"),
+                                InlineKeyboardButton("⏸", callback_data="pause"),
+                                InlineKeyboardButton("⏩", callback_data="skip")
+                            ],
+                        ]
+                    )
                 )
-            )
+        except MessageNotModified:
+            pass
 
     elif query.data=="skip":   
         if not playlist:
@@ -154,19 +166,21 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 ])
         try:
             await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Skipped !**\n\n{pl}",
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton("🔄", callback_data="replay"),
-                        InlineKeyboardButton("⏸", callback_data="pause"),
-                        InlineKeyboardButton("⏭", callback_data="skip")
-                            
-                    ],
-                ]
-            )
-        )
-        except:
+                    parse_mode="Markdown",
+                    disable_web_page_preview=True,
+                    reply_markup=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton("🔄", callback_data="replay"),
+                                InlineKeyboardButton("⏸", callback_data="pause"),
+                                InlineKeyboardButton("⏩", callback_data="skip")
+                            ],
+                        ]
+                    )
+                )
+        except MessageNotModified:
             pass
+
     elif query.data=="help":
         buttons = [
             [
@@ -185,21 +199,27 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ]
             ]
         reply_markup = InlineKeyboardMarkup(buttons)
-        await query.edit_message_text(
-            HELP_TEXT,
-            reply_markup=reply_markup
-
-        )
+        try:
+            await query.edit_message_text(
+                HELP_TEXT,
+                reply_markup=reply_markup
+            )
+        except MessageNotModified:
+            pass
 
     elif query.data=="close":
-        await query.message.delete()
+        try:
+            await query.message.delete()
+            await query.message.reply_to_message.delete()
+        except:
+            pass
 
 
 @Client.on_message(filters.command(["start", f"start@{USERNAME}"]))
 async def start(client, message):
     buttons = [
             [
-                InlineKeyboardButton("Search Songs Inline", switch_inline_query_current_chat=""),
+                InlineKeyboardButton("SEARCH SONGS INLINE", switch_inline_query_current_chat=""),
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
@@ -224,7 +244,7 @@ async def start(client, message):
 async def help(client, message):
     buttons = [
             [
-                InlineKeyboardButton("Search Songs Inline", switch_inline_query_current_chat=""),
+                InlineKeyboardButton("SEARCH SONGS INLINE", switch_inline_query_current_chat=""),
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
@@ -235,7 +255,7 @@ async def help(client, message):
                 InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
-                InlineKeyboardButton("CLOSE 🔐", callback_data="close"),
+                InlineKeyboardButton("CLOSE MENU", callback_data="close"),
             ]
             ]
     reply_markup = InlineKeyboardMarkup(buttons)
