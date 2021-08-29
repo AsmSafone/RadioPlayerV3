@@ -38,7 +38,7 @@ ADMINS_FILTER = filters.create(is_admin)
 
 
 @Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
-async def radio(client, message: Message):
+async def radio(_, message: Message):
     if 1 in RADIO:
         k=await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream!**")
         await mp.delete(k)

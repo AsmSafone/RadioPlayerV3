@@ -23,6 +23,7 @@ import asyncio
 import requests
 import youtube_dl
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from config import Config
 from utils import USERNAME, mp
 from youtube_search import YoutubeSearch
@@ -41,7 +42,7 @@ def time_to_seconds(time):
 ## Commands --------------------------------
 
 @Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
-async def song(client, message):
+async def song(_, message: Message):
     query = ''
     for i in message.command[1:]:
         query += ' ' + str(i)
@@ -96,14 +97,14 @@ async def song(client, message):
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        cap = f'🏷 <b>Title:</b> <a href="{link}">{title}</a>\n⏳ <b>Duration:</b> <code>{duration}</code>\n👀 <b>Views:</b> <code>{views}</code>\n🎧 <b>Requested By:</b> {message.from_user.mention()} \n📤 <b>Uploaded By: @AsmSafone</b> 👑'
+        cap = f'🏷 <b>Title:</b> <a href="{link}">{title}</a>\n⏳ <b>Duration:</b> <code>{duration}</code>\n👀 <b>Views:</b> <code>{views}</code>\n🎧 <b>Requested By:</b> {message.from_user.mention()} \n📤 <b>Uploaded By: <a href="https://t.me/AsmSafone">🇧🇩 Ｓ１ ＢＯＴＳ</a></b>'
         secmul, dur, dur_arr = 1, 0, duration.split(':')
         for i in range(len(dur_arr)-1, -1, -1):
             dur += (int(dur_arr[i]) * secmul)
             secmul *= 60
         await k.edit("📤 **Uploading Song...**")
         await message.reply_audio(audio_file, caption=cap, parse_mode='HTML', title=title, duration=dur, performer=performer, thumb=thumb_name)
-        await mp.delete(k)
+        await k.delete()
         await mp.delete(message)
     except Exception as e:
         await k.edit(f'❌ **An Error Occured!** \n\nError:- {e}')

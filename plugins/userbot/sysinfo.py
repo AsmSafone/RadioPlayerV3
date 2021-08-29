@@ -106,12 +106,12 @@ async def generate_sysinfo(workdir):
 
 
 @Client.on_message(
-    filters.group
-    & filters.text
+    filters.text
+    & (filters.group | filters.private)
     & self_or_contact_filter
     & ~filters.edited
     & ~filters.bot
-    & filters.regex("^!ping$")
+    & filters.regex("^.ping$")
     )
 async def ping_pong(_, m: Message):
     start = time()
@@ -123,12 +123,12 @@ async def ping_pong(_, m: Message):
 
 
 @Client.on_message(
-    filters.group
-    & filters.text
+    filters.text
+    & (filters.group | filters.private)
     & self_or_contact_filter
     & ~filters.edited
     & ~filters.bot
-    & filters.regex("^!uptime$")
+    & filters.regex("^.uptime$")
     )
 async def get_uptime(_, m: Message):
     current_time = datetime.utcnow()
@@ -142,14 +142,14 @@ async def get_uptime(_, m: Message):
 
 
 @Client.on_message(
-    filters.group
-    & filters.text
+    filters.text
+    & (filters.group | filters.private)
     & self_or_contact_filter
     & ~filters.edited
     & ~filters.bot
-    & filters.regex("^!sysinfo$")
+    & filters.regex("^.sysinfo$")
     )
-async def get_sysinfo(client, m):
+async def get_sysinfo(client, m: Message):
     response = "**System Information**:\n"
     m_reply = await m.reply_text(f"{response}`...`")
     response += await generate_sysinfo(client.workdir)

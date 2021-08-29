@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 import os
 import re
+import ffmpeg
 import asyncio
 import subprocess
 from signal import SIGINT
@@ -50,7 +51,6 @@ async def is_admin(_, client, message: Message):
         return False
 
 ADMINS_FILTER = filters.create(is_admin)
-
 
 
 @Client.on_message(filters.command(["play", f"play@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)) | filters.audio & filters.private)

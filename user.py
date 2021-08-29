@@ -26,7 +26,7 @@ if REPLY_MESSAGE is not None:
         Config.SESSION,
         Config.API_ID,
         Config.API_HASH,
-        plugins=dict(root="plugins.safone")
+        plugins=dict(root="plugins.userbot")
         )
 else:
     USER = Client(

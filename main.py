@@ -28,7 +28,8 @@ from config import Config
 from utils import mp, USERNAME, FFMPEG_PROCESSES
 from pyrogram.raw import functions, types
 from user import USER
-from pyrogram.errors import FloodWait, UserAlreadyParticipant
+from pyrogram.types import Message
+from pyrogram.errors import UserAlreadyParticipant
 
 CHAT=Config.CHAT
 ADMINS=Config.ADMINS
@@ -39,7 +40,7 @@ bot = Client(
     Config.API_ID,
     Config.API_HASH,
     bot_token=Config.BOT_TOKEN,
-    plugins=dict(root="plugins")
+    plugins=dict(root="plugins.bot")
 )
 if not os.path.isdir("./downloads"):
     os.makedirs("./downloads")
@@ -49,10 +50,7 @@ async def main():
         try:
             await USER.join_chat("AsmSafone")
         except UserAlreadyParticipant:
-            return 400
-        except FloodWait as e:
-            await asyncio.sleep(e.x)
-            return 404
+            return
         except Exception as e:
             print(e)
             pass
@@ -155,15 +153,15 @@ bot.send(
 )
 
 @bot.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
-async def restart(client, message):
+async def restart(_, message: Message):
     k=await message.reply_text("🔄 **Checking Updates ...**")
     await asyncio.sleep(3)
     await k.edit("🔄 **Updating, Please Wait...**")
     await asyncio.sleep(5)
     await k.edit("🔄 **Successfully Updated!**")
-    await asyncio.sleep(2)
-    await k.edit("🔄 **Restarting, Please Wait...\n\nJoin @AsmSafone For Updates!**")
-    await asyncio.sleep(10)
+    await asyncio.sleep(3)
+    await k.edit("🔄 **Restarting, Please Wait...**")
+    await asyncio.sleep(5)
     process = FFMPEG_PROCESSES.get(CHAT)
     if process:
         try:
@@ -178,7 +176,7 @@ async def restart(client, message):
         target=stop_and_restart
         ).start()
     try:
-        await k.delete()
+        await k.edit("✅ **Restarted Successfully! \nJoin @AsmSafone For More!**")
         await k.reply_to_message.delete()
     except:
         pass

@@ -30,18 +30,20 @@ playlist=Config.playlist
 
 HOME_TEXT = "👋🏻 **Hi [{}](tg://user?id={})**,\n\nI'm **Radio Player V3.0** \nI Can Play Radio / Music / YouTube Live In Channel & Group 24x7 Nonstop. Made with ❤️ By @AsmSafone 😉!"
 HELP_TEXT = """
-🎧 --**Need Help ?**--
-(Join @SafoTheBot For Support)
+🏷️ --**Setting Up**-- :
+
+\u2022 Add the bot and user account in your group with admin rights.
+\u2022 Start a voice chat in your group & restart the bot if not joined to vc.
+\u2022 Use /play [song name] or use /play as a reply to an audio file or youtube link.
 
 🏷️ --**Common Commands**-- :
 
-\u2022 `/play` - reply to an audio or youTube link to play it or use /play [song name]
-\u2022 `/help` - shows help for commands
-\u2022 `/song` [song name] - download the song as audio track
-\u2022 `/current` - shows playing time of current track
-\u2022 `/playlist` - shows the current playlist with controls
+\u2022 `/help` - shows help for all commands
+\u2022 `/song` [song name] - download the song as audio
+\u2022 `/current` - shows current track with controls
+\u2022 `/playlist` - shows the current & queued playlist
 
-🏷️ --**Admin Commands**-- :
+🏷️ --**Admins Commands**-- :
 
 \u2022 `/radio` - start radio stream
 \u2022 `/stopradio` - stop radio stream
@@ -184,7 +186,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data=="help":
         buttons = [
             [
-                InlineKeyboardButton("Search Songs Inline", switch_inline_query_current_chat=""),
+                InlineKeyboardButton("SEARCH SONGS INLINE", switch_inline_query_current_chat=""),
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
@@ -195,7 +197,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
-                InlineKeyboardButton("CLOSE 🔐", callback_data="close"),
+                InlineKeyboardButton("CLOSE MENU", callback_data="close"),
             ]
             ]
         reply_markup = InlineKeyboardMarkup(buttons)
