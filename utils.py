@@ -41,6 +41,7 @@ from pyrogram.utils import MAX_CHANNEL_ID
 from pyrogram.raw.types import InputGroupCall
 from pyrogram.raw.functions.phone import EditGroupCallTitle, CreateGroupCall
 from random import randint
+from pyrogram.errors import FloodWait
 
 
 bot = Client(
@@ -204,7 +205,7 @@ class MusicPlayer(object):
         # credits: https://t.me/c/1480232458/6825
         os.mkfifo(f'radio-{CHAT}.raw')
         group_call.input_filename = f'radio-{CHAT}.raw'
-        if not CALL_STATUS.get(CHAT):
+        if not group_call.is_connected:
             await self.start_call()
         ffmpeg_log = open("ffmpeg.log", "w+")
         command=["ffmpeg", "-y", "-i", station_stream_url, "-f", "s16le", "-ac", "2",
@@ -262,6 +263,10 @@ class MusicPlayer(object):
         group_call = self.group_call
         try:
             await group_call.start(CHAT)
+        except FloodWait as e:
+            await sleep(e.x)
+            if not group_call.is_connected:
+                await group_call.start(CHAT)
         except GroupCallNotFoundError:
             try:
                 await USER.send(CreateGroupCall(
