@@ -50,7 +50,7 @@ async def main():
         try:
             await USER.join_chat("AsmSafone")
         except UserAlreadyParticipant:
-            return
+            pass
         except Exception as e:
             print(e)
             pass
@@ -98,7 +98,7 @@ bot.send(
             ),
             types.BotCommand(
                 command="radio",
-                description="Start Radio/Live Stream"
+                description="Start Radio / Live Stream"
             ),
             types.BotCommand(
                 command="current",
@@ -122,7 +122,7 @@ bot.send(
             ),
             types.BotCommand(
                 command="stopradio",
-                description="Stop Radio/Live Stream"
+                description="Stop Radio / Live Stream"
             ),
             types.BotCommand(
                 command="replay",
@@ -147,6 +147,10 @@ bot.send(
             types.BotCommand(
                 command="restart",
                 description="Update & Restart Bot (Owner Only)"
+            ),
+            types.BotCommand(
+                command="setvar",
+                description="Set / Change Configs Var (For Heroku)"
             )
         ]
     )
@@ -154,33 +158,32 @@ bot.send(
 
 @bot.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
 async def restart(_, message: Message):
-    k=await message.reply_text("🔄 **Checking Updates ...**")
+    k=await message.reply_text("🔄 **Checking ...**")
     await asyncio.sleep(3)
-    await k.edit("🔄 **Updating, Please Wait...**")
-    await asyncio.sleep(5)
-    await k.edit("🔄 **Successfully Updated!**")
-    await asyncio.sleep(3)
-    await k.edit("🔄 **Restarting, Please Wait...**")
-    await asyncio.sleep(5)
-    process = FFMPEG_PROCESSES.get(CHAT)
-    if process:
-        try:
-            process.send_signal(SIGINT)
-        except subprocess.TimeoutExpired:
-            process.kill()
-        except Exception as e:
-            print(e)
-            pass
-        FFMPEG_PROCESSES[CHAT] = ""
-    Thread(
-        target=stop_and_restart
-        ).start()
+    if Config.HEROKU_APP:
+        await k.edit("🔄 **Heroku Detected, \nRestarting Your App...**")
+        Config.HEROKU_APP.restart()
+    else:
+        await k.edit("🔄 **Restarting, Please Wait...**")
+        process = FFMPEG_PROCESSES.get(CHAT)
+        if process:
+            try:
+                process.send_signal(SIGINT)
+            except subprocess.TimeoutExpired:
+                process.kill()
+            except Exception as e:
+                print(e)
+                pass
+            FFMPEG_PROCESSES[CHAT] = ""
+        Thread(
+            target=stop_and_restart()
+            ).start()
     try:
-        await k.edit("✅ **Restarted Successfully! \nJoin @AsmSafone For More!**")
+        await k.edit("✅ **Restarted Successfully! \nJoin @AsmSafone For Update!**")
         await k.reply_to_message.delete()
     except:
         pass
 
 idle()
-bot.stop()
 print("\n\nRadio Player Bot Stopped, Join @AsmSafone!")
+bot.stop()

@@ -17,33 +17,34 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 import asyncio
-from pyrogram import Client, filters, emoji
-from utils import USERNAME, mp
 from config import Config
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+from utils import USERNAME, mp
+from pyrogram import Client, filters, emoji
 from pyrogram.errors import MessageNotModified
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 msg=Config.msg
 CHAT=Config.CHAT
 ADMINS=Config.ADMINS
 playlist=Config.playlist
+LOG_GROUP=Config.LOG_GROUP
 
 HOME_TEXT = "👋🏻 **Hi [{}](tg://user?id={})**,\n\nI'm **Radio Player V3.0** \nI Can Play Radio / Music / YouTube Live In Channel & Group 24x7 Nonstop. Made with ❤️ By @AsmSafone 😉!"
 HELP_TEXT = """
-🏷️ --**Setting Up**-- :
+💡 --**Setting Up**--:
 
 \u2022 Add the bot and user account in your group with admin rights.
 \u2022 Start a voice chat in your group & restart the bot if not joined to vc.
 \u2022 Use /play [song name] or use /play as a reply to an audio file or youtube link.
 
-🏷️ --**Common Commands**-- :
+💡 --**Common Commands**--:
 
 \u2022 `/help` - shows help for all commands
 \u2022 `/song` [song name] - download the song as audio
 \u2022 `/current` - shows current track with controls
 \u2022 `/playlist` - shows the current & queued playlist
 
-🏷️ --**Admins Commands**-- :
+💡 --**Admins Commands**--:
 
 \u2022 `/radio` - start radio stream
 \u2022 `/stopradio` - stop radio stream
@@ -59,6 +60,7 @@ HELP_TEXT = """
 \u2022 `/mute` - mute the vc userbot
 \u2022 `/unmute` - unmute the vc userbot
 \u2022 `/restart` - update & restart the bot
+\u2022 `/setvar` - set/change heroku configs
 
 © **Powered By** : 
 **@AsmSafone | @SafoTheBot** 👑
@@ -75,11 +77,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         return
     else:
         await query.answer()
-    if query.data == "replay":
+    if query.data.lower() == "replay":
         group_call = mp.group_call
         if not playlist:
+            await query.answer("⛔️ Empty Playlist !", show_alert=True)
             return
         group_call.restart_playout()
+        await query.answer("🔂 Replaying !", show_alert=True)
         if not playlist:
             pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
         else:
@@ -105,11 +109,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except MessageNotModified:
             pass
 
-    elif query.data == "pause":
+    elif query.data.lower() == "pause":
         if not playlist:
+            await query.answer("⛔️ Empty Playlist !", show_alert=True)
             return
         else:
             mp.group_call.pause_playout()
+            await query.answer("⏸ Paused !", show_alert=True)
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
                 f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
@@ -131,11 +137,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except MessageNotModified:
             pass
 
-    elif query.data == "resume":   
+    elif query.data.lower() == "resume":   
         if not playlist:
+            await query.answer("⛔️ Empty Playlist !", show_alert=True)
             return
         else:
             mp.group_call.resume_playout()
+            await query.answer("▶️ Resumed !", show_alert=True)
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
                 f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
@@ -157,11 +165,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except MessageNotModified:
             pass
 
-    elif query.data=="skip":   
+    elif query.data.lower() == "skip":   
         if not playlist:
+            await query.answer("⛔️ Empty Playlist !", show_alert=True)
             return
         else:
             await mp.skip_current_playing()
+            await query.answer("⏩ Skipped !", show_alert=True)
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
                 f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
@@ -183,7 +193,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except MessageNotModified:
             pass
 
-    elif query.data=="help":
+    elif query.data.lower() == "help":
         buttons = [
             [
                 InlineKeyboardButton("SEARCH SONGS INLINE", switch_inline_query_current_chat=""),
@@ -197,6 +207,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
+                InlineKeyboardButton("BACK HOME", callback_data="home"),
                 InlineKeyboardButton("CLOSE MENU", callback_data="close"),
             ]
             ]
@@ -209,7 +220,33 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except MessageNotModified:
             pass
 
-    elif query.data=="close":
+    elif query.data.lower() == "home":
+        buttons = [
+            [
+                InlineKeyboardButton("SEARCH SONGS INLINE", switch_inline_query_current_chat=""),
+            ],
+            [
+                InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+            ],
+            [
+                InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
+                InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
+            ],
+            [
+                InlineKeyboardButton("❔ HOW TO USE ❔", callback_data="help"),
+            ]
+            ]
+        reply_markup = InlineKeyboardMarkup(buttons)
+        try:
+            await query.edit_message_text(
+                HOME_TEXT.format(query.from_user.first_name, query.from_user.id),
+                reply_markup=reply_markup
+            )
+        except MessageNotModified:
+            pass
+
+    elif query.data.lower() == "close":
         try:
             await query.message.delete()
             await query.message.reply_to_message.delete()
@@ -241,7 +278,6 @@ async def start(client, message):
     await mp.delete(message)
 
 
-
 @Client.on_message(filters.command(["help", f"help@{USERNAME}"]))
 async def help(client, message):
     buttons = [
@@ -257,6 +293,7 @@ async def help(client, message):
                 InlineKeyboardButton("SOURCE CODE", url="https://github.com/AsmSafone/RadioPlayerV3"),
             ],
             [
+                InlineKeyboardButton("BACK HOME", callback_data="home"),
                 InlineKeyboardButton("CLOSE MENU", callback_data="close"),
             ]
             ]
@@ -266,3 +303,47 @@ async def help(client, message):
     msg['help'] = await message.reply_photo(photo="https://telegra.ph/file/4e839766d45935998e9c6.jpg", caption=HELP_TEXT, reply_markup=reply_markup)
     await mp.delete(message)
 
+
+@Client.on_message(filters.command(["setvar", f"setvar@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+async def set_heroku_var(client, message):
+    if not Config.HEROKU_APP:
+        buttons = [[InlineKeyboardButton('HEROKU_API_KEY', url='https://dashboard.heroku.com/account/applications/authorizations/new')]]
+        k=await message.reply_text(
+            text="❗ **No Heroku App Found !** \n__Please Note That, This Command Needs The Following Heroku Vars To Be Set :__ \n\n1. `HEROKU_API_KEY` : Your heroku account api key.\n2. `HEROKU_APP_NAME` : Your heroku app name. \n\n**For More Ask In @SafoTheBot !!**", 
+            reply_markup=InlineKeyboardMarkup(buttons))
+        await mp.delete(k)
+        await mp.delete(message)
+        return
+    if " " in message.text:
+        cmd, env = message.text.split(" ", 1)
+        if  not "=" in env:
+            k=await message.reply_text("❗ **You Should Specify The Value For Variable!** \n\nFor Example: \n`/setvar CHAT=-1001313215676`")
+            await mp.delete(k)
+            await mp.delete(message)
+            return
+        var, value = env.split("=", 2)
+        config = Config.HEROKU_APP.config()
+        if not value:
+            m=await message.reply_text(f"❗ **No Value Specified, So Deleting `{var}` Variable !**")
+            await asyncio.sleep(2)
+            if var in config:
+                del config[var]
+                await m.edit(f"🗑 **Sucessfully Deleted `{var}` !**")
+                config[var] = None
+            else:
+                await m.edit(f"🤷‍♂️ **Variable Named `{var}` Not Found, Nothing Was Changed !**")
+            return
+        if var in config:
+            m=await message.reply_text(f"⚠️ **Variable Already Found, So Edited Value To `{value}` !**")
+        else:
+            m=await message.reply_text(f"⚠️ **Variable Not Found, So Setting As New Var !**")
+        await asyncio.sleep(2)
+        await m.edit(f"✅ **Succesfully Set Variable `{var}` With Value `{value}`, Now Restarting To Apply Changes !**")
+        config[var] = str(value)
+        await mp.delete(m)
+        await mp.delete(message)
+        return
+    else:
+        k=await message.reply_text("❗ **You Haven't Provided Any Variable, You Should Follow The Correct Format !** \n\nFor Example: \n• `/setvar CHAT=-1001313215676` to change or set CHAT var. \n• `/setvar REPLY_MESSAGE=` to delete REPLY_MESSAGE var.")
+        await mp.delete(k)
+        await mp.delete(message)

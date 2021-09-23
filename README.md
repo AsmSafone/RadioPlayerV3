@@ -41,9 +41,9 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](htt
 NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deploying!
 
 ## Config Vars:
-1. `API_ID` : Get it from my.telegram.org
-2. `API_HASH` : Get it from my.telegram.org
-3. `BOT_TOKEN` : Get it from @Botfather
+1. `API_ID` : Get it from https://my.telegram.org/apps
+2. `API_HASH` : Get it from https://my.telegram.org/apps
+3. `BOT_TOKEN` : Get it from [@Botfather](https://t.me/botfather) XD
 4. `SESSION_STRING` : Generate from [@genStr robot](http://t.me/genStr_robot) or [![genStr](https://img.shields.io/badge/repl.it-genStr-yellowgreen)](https://repl.it/@AsmSafone/genStr)
 5. `CHAT` : ID of Channel/Group where the bot plays Music/Radio.
 6. `LOG_GROUP` : Group to send Playlist, if CHAT is a Group.
@@ -52,6 +52,8 @@ NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deplo
 9. `MAXIMUM_DURATION` : Maximum duration of song to play.(Optional)
 10. `REPLY_MESSAGE` : A reply to those who message the USER account in PM. Leave it blank if you do not need this feature.
 11. `ADMIN_ONLY` : Pass 'True' If you want to make /play commands only for admins of CHAT. By default /play is available for all.
+12. `HEROKU_API_KEY`: Your Heroku api key. Get it from [here](https://dashboard.heroku.com/account)
+13. `HEROKU_APP_NAME`: Name of your Heroku app if deploying to heroku.
 
 - Enable the worker after deploy the project to Heroku.
 - Bot will starts radio automatically in given `CHAT` with given `STREAM_URL` after deploy. 
@@ -76,10 +78,10 @@ NOTE: Make Sure You Have Started A Voice Chat In Your Channel/Group Before Deplo
 ```sh
 $ git clone https://github.com/AsmSafone/RadioPlayerV3
 $ cd RadioPlayerV3
-$ sudo apt-get install python3-pip ffmpeg
+$ sudo apt install git curl python3-pip ffmpeg -y
 $ pip3 install -U pip
 $ pip3 install -r requirements.txt
-# <create variables appropriately>
+# <create .env variables appropriately>
 $ python3 main.py
 ```
 

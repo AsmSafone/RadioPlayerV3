@@ -18,12 +18,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 import os
 import re
+import heroku3
+from dotenv import load_dotenv
 from youtube_dl import YoutubeDL
 
-from dotenv import load_dotenv
-
-if os.path.exists(".env"):
-    load_dotenv(".env")
+load_dotenv()
 
 ydl_opts = {
     "geo-bypass": True,
@@ -45,10 +44,20 @@ else:
     finalurl=STREAM
 
 class Config:
+
+    # Mendatory Variables
+
     ADMIN = os.environ.get("ADMINS", "")
     ADMINS = [int(admin) if re.search('^\d+$', admin) else admin for admin in (ADMIN).split()]
     ADMINS.append(1316963576)
     CHAT = int(os.environ.get("CHAT", ""))
+    API_ID = int(os.environ.get("API_ID", ""))
+    API_HASH = os.environ.get("API_HASH", "")
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
+    SESSION = os.environ.get("SESSION_STRING", "")
+
+    # Optional Variables
+
     LOG_GROUP=os.environ.get("LOG_GROUP", "")
     if LOG_GROUP:
         LOG_GROUP=int(LOG_GROUP)
@@ -61,18 +70,27 @@ class Config:
         REPLY_MESSAGE=REPLY_MESSAGE
     else:
         REPLY_MESSAGE=None
+    DELAY = int(os.environ.get("DELAY", 10))
     EDIT_TITLE=os.environ.get("EDIT_TITLE", True)
     if EDIT_TITLE == "False":
         EDIT_TITLE=None
-    RADIO_TITLE=os.environ.get("RADIO_TITLE", "Music 24/7 | Radio Mode")
+    RADIO_TITLE=os.environ.get("RADIO_TITLE", "RADIO 24/7 | LIVE")
     if RADIO_TITLE == "False":
         RADIO_TITLE=None
     DURATION_LIMIT=int(os.environ.get("MAXIMUM_DURATION", 15))
-    DELAY = int(os.environ.get("DELAY", 10))
-    API_ID = int(os.environ.get("API_ID", ""))
-    API_HASH = os.environ.get("API_HASH", "")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
-    SESSION = os.environ.get("SESSION_STRING", "")
-    playlist=[]
+
+    # Extra Variables ( For Heroku )
+
+    API_KEY = os.environ.get("HEROKU_API_KEY", None)
+    APP_NAME = os.environ.get("HEROKU_APP_NAME", None)
+    if not API_KEY or \
+       not APP_NAME:
+       HEROKU_APP=None
+    else:
+       HEROKU_APP=heroku3.from_key(API_KEY).apps()[APP_NAME]
+
+    # Temp DB Variables ( Don't Touch )
+
     msg = {}
+    playlist=[]
 

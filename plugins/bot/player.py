@@ -21,14 +21,14 @@ import re
 import ffmpeg
 import asyncio
 import subprocess
+from config import Config
 from signal import SIGINT
 from youtube_dl import YoutubeDL
-from config import Config
-from pyrogram import Client, filters, emoji
-from pyrogram.methods.messages.download_media import DEFAULT_DOWNLOAD_DIR
-from utils import mp, RADIO, USERNAME, FFMPEG_PROCESSES
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from youtube_search import YoutubeSearch
+from pyrogram import Client, filters, emoji
+from utils import mp, RADIO, USERNAME, FFMPEG_PROCESSES
+from pyrogram.methods.messages.download_media import DEFAULT_DOWNLOAD_DIR
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 
 msg=Config.msg
@@ -58,7 +58,7 @@ async def yplay(_, message: Message):
     if ADMIN_ONLY == "True":
         admins = await mp.get_admins(CHAT)
         if message.from_user.id not in admins:
-            m=await message.reply_text("**You're Not Allowed To Play!** 🤣")
+            m=await message.reply_sticker("CAACAgUAAxkBAAEBpyZhF4R-ZbS5HUrOxI_MSQ10hQt65QACcAMAApOsoVSPUT5eqj5H0h4E")
             await mp.delete(m)
             await mp.delete(message)
             return
@@ -104,16 +104,14 @@ async def yplay(_, message: Message):
             await mp.delete(message)
             return
         if playlist and playlist[-1][2] == m_audio.audio.file_id:
-            d=await message.reply_text(f"{emoji.ROBOT} **Already Added To Playlist!**")
+            d=await message.reply_text(f"➕ **Already Added To Playlist!**")
             await mp.delete(d)
             await mp.delete(message)
             return
         data={1:m_audio.audio.title, 2:m_audio.audio.file_id, 3:"telegram", 4:user}
         playlist.append(data)
         if len(playlist) == 1:
-            m_status = await message.reply_text(
-                f"{emoji.INBOX_TRAY} **Downloading & Transcoding** ..."
-            )
+            m_status = await message.reply_text("⚡️")
             await mp.download_audio(playlist[0])
             if 1 in RADIO:
                 if group_call:
@@ -162,23 +160,23 @@ async def yplay(_, message: Message):
 
     if type=="youtube" or type=="query":
         if type=="youtube":
-            msg = await message.reply_text("🔍 **Searching ...**")
+            msg = await message.reply_text("🔍")
             url=yturl
         elif type=="query":
             try:
-                msg = await message.reply_text("🔍 **Searching ...**")
+                msg = await message.reply_text("🔍")
                 ytquery=ysearch
                 results = YoutubeSearch(ytquery, max_results=1).to_dict()
                 url = f"https://youtube.com{results[0]['url_suffix']}"
                 title = results[0]["title"][:40]
             except Exception as e:
                 await msg.edit(
-                    "**Literary Found Noting**!\nTry Searching On Inline 😉!"
+                    "**Literary Found Noting!\nTry Searching On Inline 😉!**"
                 )
                 print(str(e))
                 return
-                await mp.delete(message)
                 await mp.delete(msg)
+                await mp.delete(message)
         else:
             return
         ydl_opts = {
@@ -209,9 +207,7 @@ async def yplay(_, message: Message):
         group_call = mp.group_call
         client = group_call.client
         if len(playlist) == 1:
-            m_status = await msg.edit(
-                f"{emoji.INBOX_TRAY} **Downloading & Transcoding** ..."
-            )
+            m_status = await msg.edit("⚡️")
             await mp.download_audio(playlist[0])
             if 1 in RADIO:
                 if group_call:

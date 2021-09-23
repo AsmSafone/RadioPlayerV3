@@ -17,12 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 import asyncio
+from config import Config
+from utils import USERNAME
+from pyrogram import Client, errors
 from pyrogram.handlers import InlineQueryHandler
 from youtubesearchpython import VideosSearch
-from utils import USERNAME
-from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram import Client, errors
-from config import Config
+from pyrogram.types import InlineQueryResultArticle, InlineQueryResultPhoto, InputTextMessageContent, InlineKeyboardButton, InlineKeyboardMarkup
 
 REPLY_MESSAGE=Config.REPLY_MESSAGE
 buttons = [
@@ -44,10 +44,11 @@ async def search(client, query):
     answers = []
     if query.query == "SAF_ONE":
         answers.append(
-            InlineQueryResultArticle(
+            InlineQueryResultPhoto(
                 title="Deploy Your Own Radio Player",
                 thumb_url="https://telegra.ph/file/4e839766d45935998e9c6.jpg",
-                input_message_content=InputTextMessageContent(f"{REPLY_MESSAGE}\n\n<b>© Powered By : \n@AsmSafone | @SafoTheBot 👑</b>", disable_web_page_preview=True),
+                photo_url="https://telegra.ph/file/4e839766d45935998e9c6.jpg",
+                caption=f"{REPLY_MESSAGE}\n\n<b>© Powered By : \n@AsmSafone | @SafoTheBot 👑</b>",
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )

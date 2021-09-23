@@ -22,6 +22,7 @@ import wget
 import ffmpeg
 import asyncio
 import subprocess
+from os import path
 from pyrogram import emoji
 try:
     from pytgcalls.exceptions import GroupCallNotFoundError
@@ -35,13 +36,12 @@ from config import Config
 from asyncio import sleep
 from pyrogram import Client
 from youtube_dl import YoutubeDL
-from os import path
 from signal import SIGINT
+from random import randint
+from pyrogram.errors import FloodWait
 from pyrogram.utils import MAX_CHANNEL_ID
 from pyrogram.raw.types import InputGroupCall
 from pyrogram.raw.functions.phone import EditGroupCallTitle, CreateGroupCall
-from random import randint
-from pyrogram.errors import FloodWait
 
 
 bot = Client(
@@ -262,11 +262,11 @@ class MusicPlayer(object):
     async def start_call(self):
         group_call = self.group_call
         try:
-            await group_call.start(CHAT)
+            await group_call.start(CHAT, enable_action=False)
         except FloodWait as e:
             await sleep(e.x)
             if not group_call.is_connected:
-                await group_call.start(CHAT)
+                await group_call.start(CHAT, enable_action=False)
         except GroupCallNotFoundError:
             try:
                 await USER.send(CreateGroupCall(
@@ -274,7 +274,7 @@ class MusicPlayer(object):
                     random_id=randint(10000, 999999999)
                     )
                     )
-                await group_call.start(CHAT)
+                await group_call.start(CHAT, enable_action=False)
             except Exception as e:
                 print(e)
                 pass

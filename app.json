@@ -18,19 +18,19 @@
   ],
   "env": {
     "API_ID": {
-      "description": "User Accounts Telegram API_ID get it from my.telegram.org/apps",
+      "description": "User Accounts Telegram API_ID get it from https://my.telegram.org/apps",
       "required": true
     },
     "API_HASH": {
-      "description": "User Accounts Telegram API_HASH get it from my.telegram.org/apps",
+      "description": "User Accounts Telegram API_HASH get it from https://my.telegram.org/apps",
       "required": true
     },
     "BOT_TOKEN": {
-      "description": "Your Telegram Bot Token, get it from @Botfather XD",
+      "description": "Your Telegram Bot Token, get it from https://t.me/botfather",
       "required": true
     },
     "SESSION_STRING": {
-      "description": "User Session String, get it from @genStr_robot. Read readme to learn more",
+      "description": "User Accounts Session String, get it from https://replit.com/@AsmSafone/genStr",
       "required": true
     },
     "CHAT": {
@@ -64,6 +64,14 @@
       "description": "A reply message to those who message the USER account in PM. Make it blank if you do not need this feature.",
       "value": "Hello Sir, I'm a bot to play radio/music/youtube live on telegram voice chat, not having time to chat with you 😂!",
       "required": false
+    },
+    "HEROKU_API_KEY": {
+      "description": "Your Heroku api token. Get it from https://dashboard.heroku.com/account",
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "description": "Name of your Heroku app, given in the first blank on this page if deploying to heroku.",
+      "required": true
     }
   },
   "formation": {
