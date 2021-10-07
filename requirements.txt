@@ -9,5 +9,5 @@ youtube_dl
 ffmpeg-python
 python-dotenv
 youtube_search
-pytgcalls[pyrogram]
+pytgcalls
 youtube_search_python
