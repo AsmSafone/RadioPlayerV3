@@ -58,7 +58,7 @@ from user import USER
 
 ADMINS=Config.ADMINS
 STREAM_URL=Config.STREAM_URL
-CHAT=Config.CHAT
+CHAT_ID=Config.CHAT_ID
 ADMIN_LIST = {}
 CALL_STATUS = {}
 FFMPEG_PROCESSES = {}
@@ -181,7 +181,7 @@ class MusicPlayer(object):
         group_call = self.group_call
         if group_call.is_connected:
             playlist.clear()   
-        process = FFMPEG_PROCESSES.get(CHAT)
+        process = FFMPEG_PROCESSES.get(CHAT_ID)
         if process:
             try:
                 process.send_signal(SIGINT)
@@ -190,7 +190,7 @@ class MusicPlayer(object):
             except Exception as e:
                 print(e)
                 pass
-            FFMPEG_PROCESSES[CHAT] = ""
+            FFMPEG_PROCESSES[CHAT_ID] = ""
         station_stream_url = STREAM_URL
         try:
             RADIO.remove(0)
@@ -200,11 +200,11 @@ class MusicPlayer(object):
             RADIO.add(1)
         except:
             pass
-        if os.path.exists(f'radio-{CHAT}.raw'):
-            os.remove(f'radio-{CHAT}.raw')
+        if os.path.exists(f'radio-{CHAT_ID}.raw'):
+            os.remove(f'radio-{CHAT_ID}.raw')
         # credits: https://t.me/c/1480232458/6825
-        os.mkfifo(f'radio-{CHAT}.raw')
-        group_call.input_filename = f'radio-{CHAT}.raw'
+        os.mkfifo(f'radio-{CHAT_ID}.raw')
+        group_call.input_filename = f'radio-{CHAT_ID}.raw'
         if not group_call.is_connected:
             await self.start_call()
         ffmpeg_log = open("ffmpeg.log", "w+")
@@ -219,7 +219,7 @@ class MusicPlayer(object):
             )
 
 
-        FFMPEG_PROCESSES[CHAT] = process
+        FFMPEG_PROCESSES[CHAT_ID] = process
         if RADIO_TITLE:
             await self.edit_title()
         await sleep(2)
@@ -247,7 +247,7 @@ class MusicPlayer(object):
                 RADIO.add(0)
             except:
                 pass
-        process = FFMPEG_PROCESSES.get(CHAT)
+        process = FFMPEG_PROCESSES.get(CHAT_ID)
         if process:
             try:
                 process.send_signal(SIGINT)
@@ -256,25 +256,25 @@ class MusicPlayer(object):
             except Exception as e:
                 print(e)
                 pass
-            FFMPEG_PROCESSES[CHAT] = ""
+            FFMPEG_PROCESSES[CHAT_ID] = ""
 
 
     async def start_call(self):
         group_call = self.group_call
         try:
-            await group_call.start(CHAT, enable_action=False)
+            await group_call.start(CHAT_ID)
         except FloodWait as e:
             await sleep(e.x)
             if not group_call.is_connected:
-                await group_call.start(CHAT, enable_action=False)
+                await group_call.start(CHAT_ID)
         except GroupCallNotFoundError:
             try:
                 await USER.send(CreateGroupCall(
-                    peer=(await USER.resolve_peer(CHAT)),
+                    peer=(await USER.resolve_peer(CHAT_ID)),
                     random_id=randint(10000, 999999999)
                     )
                     )
-                await group_call.start(CHAT, enable_action=False)
+                await group_call.start(CHAT_ID)
             except Exception as e:
                 print(e)
                 pass

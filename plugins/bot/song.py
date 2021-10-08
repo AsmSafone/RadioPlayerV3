@@ -24,11 +24,11 @@ import requests
 import youtube_dl
 from config import Config
 from utils import USERNAME, mp
-from pyrogram import Client, filters
 from pyrogram.types import Message
+from pyrogram import Client, filters
 from youtube_search import YoutubeSearch
 
-CHAT=Config.CHAT
+CHAT_ID=Config.CHAT_ID
 LOG_GROUP=Config.LOG_GROUP
 
 ## Extra Fns -------------------------------
@@ -41,7 +41,7 @@ def time_to_seconds(time):
 
 ## Commands --------------------------------
 
-@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+@Client.on_message(filters.command(["song", f"song@{USERNAME}"]) & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def song(_, message: Message):
     query = ''
     for i in message.command[1:]:
@@ -109,8 +109,10 @@ async def song(_, message: Message):
     except Exception as e:
         await k.edit(f'❌ **An Error Occured!** \n\nError:- {e}')
         print(e)
+        pass
     try:
         os.remove(audio_file)
         os.remove(thumb_name)
     except Exception as e:
         print(e)
+        pass

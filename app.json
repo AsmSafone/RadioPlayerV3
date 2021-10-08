@@ -33,20 +33,20 @@
       "description": "User Accounts Session String, get it from https://replit.com/@AsmSafone/genStr",
       "required": true
     },
-    "CHAT": {
+    "CHAT_ID": {
       "description": "ID of your Channel or Group where the bot plays Radio/Music/YouTube Lives",
       "required": true
     },
     "LOG_GROUP": {
-      "description": "ID of the group to send playlist if CHAT is a Group, if channel then leave blank",
+      "description": "ID of the group to send playlist if CHAT_ID is a Group, if channel then leave blank",
       "required": false
     },
-    "ADMINS": {
+    "AUTH_USERS": {
       "description": "ID of Auth Users who can use Admin commands (for multiple users seperated by space)",
       "required": true
     },
     "ADMIN_ONLY": {
-      "description": "Change it to 'True' If you want to make /play commands only for admins of CHAT. By default /play is available for all.",
+      "description": "Change it to 'True' If you want to make /play commands only for admins of CHAT_ID. By default /play is available for all.",
       "value": "False",
       "required": false
     },

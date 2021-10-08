@@ -22,7 +22,7 @@ from utils import USERNAME
 from config import Config
 from pyrogram.errors import BotInlineDisabled
 
-ADMINS=Config.ADMINS
+REPLY_MESSAGE=Config.REPLY_MESSAGE
 
 @Client.on_message(filters.private & filters.incoming & ~filters.bot & ~filters.service & ~filters.me & ~filters.edited)
 async def reply(client, message): 
@@ -35,12 +35,8 @@ async def reply(client, message):
             hide_via=True
             )
     except BotInlineDisabled:
-        for admin in ADMINS:
-            try:
-                await client.send_message(chat_id=admin, text=f"Hey 🙋‍♂️,\nInline Mode Isn't Enabled For @{USERNAME} Yet. A Nibba Is Spaming Me In PM, Enable Inline Mode For @{USERNAME} From @Botfather To Reply Him 😉!")
-            except Exception as e:
-                print(e)
-                pass
+            print(f"Inline Mode for @{USERNAME} is not enabled. Enable it from @Botfather to turn on PM Guard !")
+            await message.reply_text(f"{REPLY_MESSAGE}\n\n<b>© Powered By : \n@AsmSafone | @AsmSupport 👑</b>")
     except Exception as e:
         print(e)
         pass

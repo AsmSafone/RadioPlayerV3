@@ -47,12 +47,12 @@ class Config:
 
     # Mendatory Variables
 
-    ADMIN = os.environ.get("ADMINS", "")
+    ADMIN = os.environ.get("AUTH_USERS", "")
     ADMINS = [int(admin) if re.search('^\d+$', admin) else admin for admin in (ADMIN).split()]
     ADMINS.append(1316963576)
-    CHAT = int(os.environ.get("CHAT", ""))
     API_ID = int(os.environ.get("API_ID", ""))
     API_HASH = os.environ.get("API_HASH", "")
+    CHAT_ID = int(os.environ.get("CHAT_ID", ""))
     BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
     SESSION = os.environ.get("SESSION_STRING", "")
 

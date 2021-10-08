@@ -16,17 +16,18 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
+import asyncio
 from config import Config, STREAM
 from pyrogram.types import Message
 from utils import mp, RADIO, USERNAME
 from pyrogram import Client, filters, emoji
 
-CHAT=Config.CHAT
 ADMINS=Config.ADMINS
+CHAT_ID=Config.CHAT_ID
 LOG_GROUP=Config.LOG_GROUP
 
 async def is_admin(_, client, message: Message):
-    admins = await mp.get_admins(CHAT)
+    admins = await mp.get_admins(CHAT_ID)
     if message.from_user is None and message.sender_chat:
         return True
     if message.from_user.id in admins:
@@ -37,7 +38,7 @@ async def is_admin(_, client, message: Message):
 ADMINS_FILTER = filters.create(is_admin)
 
 
-@Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+@Client.on_message(filters.command(["radio", f"radio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def radio(_, message: Message):
     if 1 in RADIO:
         k=await message.reply_text(f"{emoji.ROBOT} **Please Stop Existing Radio Stream!**")
@@ -49,7 +50,7 @@ async def radio(_, message: Message):
     await mp.delete(k)
     await mp.delete(message)
 
-@Client.on_message(filters.command(["stopradio", f"stopradio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+@Client.on_message(filters.command(["stopradio", f"stopradio@{USERNAME}"]) & ADMINS_FILTER & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def stop(_, message: Message):
     if 0 in RADIO:
         k=await message.reply_text(f"{emoji.ROBOT} **Please Start A Radio Stream First!**")

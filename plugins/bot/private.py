@@ -24,8 +24,8 @@ from pyrogram.errors import MessageNotModified
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 
 msg=Config.msg
-CHAT=Config.CHAT
 ADMINS=Config.ADMINS
+CHAT_ID=Config.CHAT_ID
 playlist=Config.playlist
 LOG_GROUP=Config.LOG_GROUP
 
@@ -75,15 +75,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             show_alert=True
             )
         return
-    else:
-        await query.answer()
+
     if query.data.lower() == "replay":
         group_call = mp.group_call
         if not playlist:
             await query.answer("⛔️ Empty Playlist !", show_alert=True)
             return
         group_call.restart_playout()
-        await query.answer("🔂 Replaying !", show_alert=True)
         if not playlist:
             pl = f"{emoji.NO_ENTRY} **Empty Playlist!**"
         else:
@@ -92,8 +90,8 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 for i, x in enumerate(playlist)
                 ])
         try:
-            await query.edit_message_text(
-                    f"{pl}",
+            await query.answer("🔂 Replaying !", show_alert=True)
+            await query.edit_message_text(f"{pl}",
                     parse_mode="Markdown",
                     disable_web_page_preview=True,
                     reply_markup=InlineKeyboardMarkup(
@@ -115,13 +113,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return
         else:
             mp.group_call.pause_playout()
-            await query.answer("⏸ Paused !", show_alert=True)
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
                 f"**{i}**. **{x[1]}**\n  **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         try:
-            await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Paused !**\n\n{pl}",
+            await query.answer("⏸ Paused !", show_alert=True)
+            await query.edit_message_text(f"{pl}",
                     parse_mode="Markdown",
                     disable_web_page_preview=True,
                     reply_markup=InlineKeyboardMarkup(
@@ -143,13 +141,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return
         else:
             mp.group_call.resume_playout()
-            await query.answer("▶️ Resumed !", show_alert=True)
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
                 f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         try:
-            await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Resumed !**\n\n{pl}",
+            await query.answer("▶️ Resumed !", show_alert=True)
+            await query.edit_message_text(f"{pl}",
                     parse_mode="Markdown",
                     disable_web_page_preview=True,
                     reply_markup=InlineKeyboardMarkup(
@@ -171,13 +169,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return
         else:
             await mp.skip_current_playing()
-            await query.answer("⏩ Skipped !", show_alert=True)
             pl = f"{emoji.PLAY_BUTTON} **Playlist**:\n" + "\n".join([
                 f"**{i}**. **{x[1]}**\n  - **Requested By:** {x[4]}"
                 for i, x in enumerate(playlist)
                 ])
         try:
-            await query.edit_message_text(f"{emoji.PLAY_OR_PAUSE_BUTTON} **Skipped !**\n\n{pl}",
+            await query.answer("⏩ Skipped !", show_alert=True)
+            await query.edit_message_text(f"{pl}",
                     parse_mode="Markdown",
                     disable_web_page_preview=True,
                     reply_markup=InlineKeyboardMarkup(
@@ -200,7 +198,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
-                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/AsmSupport"),
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
@@ -227,7 +225,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
-                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/AsmSupport"),
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
@@ -253,6 +251,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except:
             pass
 
+    await query.answer()
+
+
 
 @Client.on_message(filters.command(["start", f"start@{USERNAME}"]))
 async def start(client, message):
@@ -262,7 +263,7 @@ async def start(client, message):
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
-                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/AsmSupport"),
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
@@ -286,7 +287,7 @@ async def help(client, message):
             ],
             [
                 InlineKeyboardButton("CHANNEL", url="https://t.me/AsmSafone"),
-                InlineKeyboardButton("SUPPORT", url="https://t.me/SafoTheBot"),
+                InlineKeyboardButton("SUPPORT", url="https://t.me/AsmSupport"),
             ],
             [
                 InlineKeyboardButton("MORE BOTS", url="https://t.me/AsmSafone/173"),
@@ -304,7 +305,7 @@ async def help(client, message):
     await mp.delete(message)
 
 
-@Client.on_message(filters.command(["setvar", f"setvar@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+@Client.on_message(filters.command(["setvar", f"setvar@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def set_heroku_var(client, message):
     if not Config.HEROKU_APP:
         buttons = [[InlineKeyboardButton('HEROKU_API_KEY', url='https://dashboard.heroku.com/account/applications/authorizations/new')]]
@@ -317,7 +318,7 @@ async def set_heroku_var(client, message):
     if " " in message.text:
         cmd, env = message.text.split(" ", 1)
         if  not "=" in env:
-            k=await message.reply_text("❗ **You Should Specify The Value For Variable!** \n\nFor Example: \n`/setvar CHAT=-1001313215676`")
+            k=await message.reply_text("❗ **You Should Specify The Value For Variable!** \n\nFor Example: \n`/setvar CHAT_ID=-1001313215676`")
             await mp.delete(k)
             await mp.delete(message)
             return
@@ -344,6 +345,6 @@ async def set_heroku_var(client, message):
         await mp.delete(message)
         return
     else:
-        k=await message.reply_text("❗ **You Haven't Provided Any Variable, You Should Follow The Correct Format !** \n\nFor Example: \n• `/setvar CHAT=-1001313215676` to change or set CHAT var. \n• `/setvar REPLY_MESSAGE=` to delete REPLY_MESSAGE var.")
+        k=await message.reply_text("❗ **You Haven't Provided Any Variable, You Should Follow The Correct Format !** \n\nFor Example: \n• `/setvar CHAT_ID=-1001313215676` to change or set CHAT var. \n• `/setvar REPLY_MESSAGE=` to delete REPLY_MESSAGE var.")
         await mp.delete(k)
         await mp.delete(message)

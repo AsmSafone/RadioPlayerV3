@@ -17,12 +17,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 import asyncio
-from datetime import datetime
+import psutil
 from time import time
 from config import Config
+from datetime import datetime
 from pyrogram import Client, filters, emoji
 from pyrogram.types import Message
-import psutil
 from psutil._common import bytes2human
 
 START_TIME = datetime.utcnow()

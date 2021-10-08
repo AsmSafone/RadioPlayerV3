@@ -31,8 +31,8 @@ from user import USER
 from pyrogram.types import Message
 from pyrogram.errors import UserAlreadyParticipant
 
-CHAT=Config.CHAT
 ADMINS=Config.ADMINS
+CHAT_ID=Config.CHAT_ID
 LOG_GROUP=Config.LOG_GROUP
 
 bot = Client(
@@ -156,7 +156,7 @@ bot.send(
     )
 )
 
-@bot.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT) | filters.private | filters.chat(LOG_GROUP)))
+@bot.on_message(filters.command(["restart", f"restart@{USERNAME}"]) & filters.user(ADMINS) & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def restart(_, message: Message):
     k=await message.reply_text("🔄 **Checking ...**")
     await asyncio.sleep(3)
@@ -165,7 +165,7 @@ async def restart(_, message: Message):
         Config.HEROKU_APP.restart()
     else:
         await k.edit("🔄 **Restarting, Please Wait...**")
-        process = FFMPEG_PROCESSES.get(CHAT)
+        process = FFMPEG_PROCESSES.get(CHAT_ID)
         if process:
             try:
                 process.send_signal(SIGINT)
@@ -174,7 +174,7 @@ async def restart(_, message: Message):
             except Exception as e:
                 print(e)
                 pass
-            FFMPEG_PROCESSES[CHAT] = ""
+            FFMPEG_PROCESSES[CHAT_ID] = ""
         Thread(
             target=stop_and_restart()
             ).start()
