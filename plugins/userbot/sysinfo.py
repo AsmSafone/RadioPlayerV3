@@ -16,14 +16,15 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
-import asyncio
+import os
 import psutil
+import asyncio
 from time import time
 from config import Config
 from datetime import datetime
-from pyrogram import Client, filters, emoji
 from pyrogram.types import Message
 from psutil._common import bytes2human
+from pyrogram import Client, filters, emoji
 
 START_TIME = datetime.utcnow()
 START_TIME_ISO = START_TIME.replace(microsecond=0).isoformat()
@@ -106,12 +107,12 @@ async def generate_sysinfo(workdir):
 
 
 @Client.on_message(
-    filters.text
+    filters.command("ping", prefixes=".")
     & (filters.group | filters.private)
     & self_or_contact_filter
     & ~filters.edited
     & ~filters.bot
-    & filters.regex("^.ping$")
+    & ~filters.via_bot
     )
 async def ping_pong(_, m: Message):
     start = time()
@@ -123,31 +124,31 @@ async def ping_pong(_, m: Message):
 
 
 @Client.on_message(
-    filters.text
+    filters.command("uptime", prefixes=".")
     & (filters.group | filters.private)
     & self_or_contact_filter
     & ~filters.edited
     & ~filters.bot
-    & filters.regex("^.uptime$")
+    & ~filters.via_bot
     )
 async def get_uptime(_, m: Message):
     current_time = datetime.utcnow()
     uptime_sec = (current_time - START_TIME).total_seconds()
     uptime = await _human_time_duration(int(uptime_sec))
     await m.reply_text(
-        f"{emoji.ROBOT} Radio Player V3.0\n"
-        f"- Uptime: `{uptime}`\n"
-        f"- Restarted: `{START_TIME_ISO}`"
+        f"{emoji.ROBOT} **Radio Player V3.0**\n"
+        f"- **Uptime:** `{uptime}`\n"
+        f"- **Restarted:** `{START_TIME_ISO}`"
     )
 
 
 @Client.on_message(
-    filters.text
+    filters.command("sysinfo", prefixes=".")
     & (filters.group | filters.private)
     & self_or_contact_filter
     & ~filters.edited
     & ~filters.bot
-    & filters.regex("^.sysinfo$")
+    & ~filters.via_bot
     )
 async def get_sysinfo(client, m: Message):
     response = "**System Information**:\n"

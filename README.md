@@ -10,13 +10,13 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AsmSafone/RadioPlayerV3)
 ![GitHub](https://img.shields.io/github/license/AsmSafone/RadioPlayerV3)
 [![Bot Updates](https://img.shields.io/badge/RadioPlayerV3-Updates%20Channel-green)](https://t.me/AsmSafone)
-[![Bot Support](https://img.shields.io/badge/RadioPlayerV3-Support%20Group-blue)](https://t.me/safothebot)
+[![Bot Support](https://img.shields.io/badge/RadioPlayerV3-Support%20Group-blue)](https://t.me/AsmSupport)
 
 
 An Advanced Telegram Bot to Play Nonstop Radio/Music/YouTube Live in Channel or Group Voice Chats.
 
 This is also the source code of the bot which is being used for playing
-Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [SafoTheBot](https://t.me/safothebot) Group.
+Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [AsmSupport](https://t.me/AsmSupport) Group.
 
 ## Special Features
 
@@ -105,5 +105,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 
 ## Credits
 
-Special Thanks To All [Contributors](https://github.com/AsmSafone/RadioPlayerV3/graphs/contributors) & Lib Owners!
+- [Me](https://github.com/AsmSafone) for [Noting](https://github.com/AsmSafone/RadioPlayerV3) 😬
+- [Dan](https://github.com/delivrance) for [Pyrogram](https://github.com/pyrogram/pyrogram) ❤️
+- [MarshalX](https://github.com/MarshalX) for [pytgcalls](https://github.com/MarshalX/tgcalls) ❤️
+- And Thanks To All [Contributors](https://github.com/AsmSafone/RadioPlayerV3/graphs/contributors)! ❤️
 
