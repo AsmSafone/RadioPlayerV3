@@ -10,4 +10,4 @@ ffmpeg-python
 python-dotenv
 youtube_search
 pytgcalls[pyrogram]
-youtube_search_python
+youtube_search_python==1.4.9
