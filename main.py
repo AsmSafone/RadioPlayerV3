@@ -26,7 +26,8 @@ from signal import SIGINT
 from pyrogram import Client, filters, idle
 from config import Config
 from utils import mp, USERNAME, FFMPEG_PROCESSES
-from pyrogram.raw import functions, types
+from pyrogram.raw.functions.bots import SetBotCommands
+from pyrogram.raw.types import BotCommand, BotCommandScopeDefault
 from user import USER
 from pyrogram.types import Message
 from pyrogram.errors import UserAlreadyParticipant
@@ -66,89 +67,91 @@ bot.run(main())
 bot.start()
 print("\n\nRadio Player Bot Started, Join @AsmSafone!")
 bot.send(
-    functions.bots.SetBotCommands(
+    SetBotCommands(
+        scope=BotCommandScopeDefault(),
+        lang_code="en",
         commands=[
-            types.BotCommand(
+            BotCommand(
                 command="start",
                 description="Start The Bot"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="help",
                 description="Show Help Message"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="play",
                 description="Play Music From YouTube"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="song",
                 description="Download Music As Audio"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="skip",
                 description="Skip The Current Music"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="pause",
                 description="Pause The Current Music"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="resume",
                 description="Resume The Paused Music"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="radio",
                 description="Start Radio / Live Stream"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="current",
                 description="Show Current Playing Song"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="playlist",
                 description="Show The Current Playlist"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="join",
                 description="Join To The Voice Chat"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="leave",
                 description="Leave From The Voice Chat"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="stop",
                 description="Stop Playing The Music"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="stopradio",
                 description="Stop Radio / Live Stream"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="replay",
                 description="Replay From The Begining"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="clean",
                 description="Clean Unused RAW PCM Files"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="mute",
                 description="Mute Userbot In Voice Chat"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="unmute",
                 description="Unmute Userbot In Voice Chat"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="volume",
                 description="Change The Voice Chat Volume"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="restart",
                 description="Update & Restart Bot (Owner Only)"
             ),
-            types.BotCommand(
+            BotCommand(
                 command="setvar",
                 description="Set / Change Configs Var (For Heroku)"
             )
