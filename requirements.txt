@@ -3,11 +3,11 @@ wheel
 psutil
 heroku3
 requests
-Pyrogram==1.2.9
-TgCrypto==1.2.2
+TgCrypto
 youtube_dl
 ffmpeg-python
 python-dotenv
 youtube_search
-pytgcalls[pyrogram]
-youtube_search_python==1.4.9
+youtube_search_python
+pytgcalls==3.0.0.dev19
+git+https://github.com/AsmSafone/pyrogram@master
