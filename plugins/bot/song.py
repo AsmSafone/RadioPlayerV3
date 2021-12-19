@@ -20,8 +20,8 @@ import os
 import time
 import ffmpeg
 import asyncio
+import yt_dlp
 import requests
-import youtube_dl
 from config import Config
 from utils import USERNAME, mp
 from pyrogram.types import Message
@@ -93,7 +93,7 @@ async def song(_, message: Message):
         return
     await k.edit("📥 **Downloading Song...**")
     try:
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)

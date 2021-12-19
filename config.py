@@ -19,8 +19,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 import os
 import re
 import heroku3
+from yt_dlp import YoutubeDL
 from dotenv import load_dotenv
-from youtube_dl import YoutubeDL
 
 load_dotenv()
 

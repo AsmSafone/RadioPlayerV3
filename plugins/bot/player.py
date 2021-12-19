@@ -23,7 +23,7 @@ import asyncio
 import subprocess
 from config import Config
 from signal import SIGINT
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from youtube_search import YoutubeSearch
 from pyrogram import Client, filters, emoji
 from utils import mp, RADIO, USERNAME, FFMPEG_PROCESSES

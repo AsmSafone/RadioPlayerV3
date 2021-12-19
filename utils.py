@@ -30,17 +30,17 @@ except ModuleNotFoundError:
     file=os.path.abspath("requirements.txt")
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', file, '--upgrade'])
     os.execl(sys.executable, sys.executable, *sys.argv)
-from pyrogram.methods.messages.download_media import DEFAULT_DOWNLOAD_DIR
-from pytgcalls import GroupCallFactory
 from config import Config
 from asyncio import sleep
 from pyrogram import Client
-from youtube_dl import YoutubeDL
 from signal import SIGINT
 from random import randint
+from yt_dlp import YoutubeDL
+from pytgcalls import GroupCallFactory
 from pyrogram.errors import FloodWait
 from pyrogram.utils import MAX_CHANNEL_ID
 from pyrogram.raw.types import InputGroupCall
+from pyrogram.methods.messages.download_media import DEFAULT_DOWNLOAD_DIR
 from pyrogram.raw.functions.phone import EditGroupCallTitle, CreateGroupCall
 
 
