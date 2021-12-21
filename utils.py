@@ -25,6 +25,7 @@ import subprocess
 from os import path
 from pyrogram import emoji
 try:
+    from yt_dlp import YoutubeDL
     from pytgcalls.exceptions import GroupCallNotFoundError
 except ModuleNotFoundError:
     file=os.path.abspath("requirements.txt")
@@ -35,7 +36,6 @@ from asyncio import sleep
 from pyrogram import Client
 from signal import SIGINT
 from random import randint
-from yt_dlp import YoutubeDL
 from pytgcalls import GroupCallFactory
 from pyrogram.errors import FloodWait
 from pyrogram.utils import MAX_CHANNEL_ID
