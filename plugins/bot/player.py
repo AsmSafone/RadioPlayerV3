@@ -552,7 +552,7 @@ async def show_playlist(_, m: Message):
         msg['playlist'] = await m.reply_text(pl)
     await mp.delete(m)
 
-admincmds=["join", "unmute", "mute", "leave", "clean", "pause", "resume", "stop", "skip", "radio", "stopradio", "replay", "restart", "volume", f"volume@{USERNAME}", f"join@{USERNAME}", f"unmute@{USERNAME}", f"mute@{USERNAME}", f"leave@{USERNAME}", f"clean@{USERNAME}", f"pause@{USERNAME}", f"resume@{USERNAME}", f"stop@{USERNAME}", f"skip@{USERNAME}", f"radio@{USERNAME}", f"stopradio@{USERNAME}", f"replay@{USERNAME}", f"restart@{USERNAME}"]
+admincmds=["pause", "resume", "stop", "skip", f"pause@{USERNAME}", f"resume@{USERNAME}", f"stop@{USERNAME}", f"skip@{USERNAME}"]
 
 @Client.on_message(filters.command(admincmds) & ~ADMINS_FILTER & (filters.chat(CHAT_ID) | filters.private | filters.chat(LOG_GROUP)))
 async def notforu(_, m: Message):
@@ -560,7 +560,7 @@ async def notforu(_, m: Message):
     await mp.delete(k)
     await mp.delete(m)
 
-allcmd = ["play", "current", "playlist", "song", f"song@{USERNAME}", f"play@{USERNAME}", f"current@{USERNAME}", f"playlist@{USERNAME}"] + admincmds
+allcmd = ["play", "song", f"play@{USERNAME}"] + admincmds
 
 @Client.on_message(filters.command(allcmd) & filters.group & ~filters.chat(CHAT_ID) & ~filters.chat(LOG_GROUP))
 async def not_chat(_, m: Message):
