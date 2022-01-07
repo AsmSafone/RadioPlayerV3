@@ -45,10 +45,7 @@ async def is_admin(_, client, message: Message):
     admins = await mp.get_admins(CHAT_ID)
     if message.from_user is None and message.sender_chat:
         return True
-    if message.from_user.id in admins:
-        return True
-    else:
-        return False
+    return message.from_user.id in admins
 
 ADMINS_FILTER = filters.create(is_admin)
 
