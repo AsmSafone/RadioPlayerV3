@@ -1,19 +1,18 @@
 {
   "name": "Telegram Radio Player V3",
   "description": "An Telegram Bot By Safone to Play Nonstop Radio/Music/YouTube Live in Telegram Voice Chats",
-  "repository": "https://github.com/AsmSafone/RadioPlayerV3",
   "logo": "https://telegra.ph/file/a3755d9cb09f1361e3ac7.jpg",
   "stack": "container",
   "keywords": [
     "telegram",
     "bot",
-    "voicechat",
     "radio",
     "music",
     "python",
     "pyrogram",
     "pytgcalls",
     "vcradio",
+    "voicechat",
     "radioplayer"
   ],
   "env": {
