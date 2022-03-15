@@ -34,7 +34,7 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [AsmSupport](htt
 
 <p><a href="https://deploy.safone.tech/"><img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
 
-Note: `First Fork The Repo Then Click On Deploy To Heroku Button!`
+NOTE: Change the app region to Europe (it will help to make the bot stable)
 
 ## Deploy to Railway
 
