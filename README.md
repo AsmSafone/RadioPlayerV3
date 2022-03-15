@@ -30,14 +30,11 @@ Radio in [AsmSafone](https://t.me/AsmSafone) Channel & Music in [AsmSupport](htt
 - Change Voice chat title to current playing song name
 - Automatically downloads audio for the first two tracks in the playlist to ensure smooth playing
 
-# ✨ Heroku Deploy
-Change the app region to Europe (it will help to make the bot stable)
-  
-<p align="left"><a href="https://dashboard.heroku.com/new?template=https://github.com/log-afk-xd/RadioPlayerV3"><img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="250" alt="Deploy"></a></p>
+## Deploy to Heroku
 
+<p><a href="https://deploy.safone.tech/"><img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
 
-
-Note: `First Fork The Repo Then Click On Deploy To Heroku Button!`
+NOTE: Change the app region to Europe (it will help to make the bot stable)
 
 ## Deploy to Railway
 
