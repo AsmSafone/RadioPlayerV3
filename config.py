@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 
+
 import os
 import re
 import sys
@@ -41,12 +42,10 @@ links=[]
 finalurl=""
 STREAM=os.environ.get("STREAM_URL", "https://www.liveradio.ie/stations/star-radio-tamil")
 regex = r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+"
-match = re.match(regex,STREAM)
-if match:
+if match := re.match(regex, STREAM):
     meta = ydl.extract_info(STREAM, download=False)
     formats = meta.get('formats', [meta])
-    for f in formats:
-        links.append(f['url'])
+    links.extend(f['url'] for f in formats)
     finalurl=links[0]
 else:
     finalurl=STREAM
