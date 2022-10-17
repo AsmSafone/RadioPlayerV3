@@ -17,6 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>
 """
 
 
+
 import os
 import re
 import sys
@@ -39,14 +40,12 @@ ydl_opts = {
 ydl = YoutubeDL(ydl_opts)
 links=[]
 finalurl=""
-STREAM=os.environ.get("STREAM_URL", "http://peridot.streamguys.com:7150/Mirchi")
+STREAM=os.environ.get("STREAM_URL", "https://www.liveradio.ie/stations/star-radio-tamil")
 regex = r"^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+"
-match = re.match(regex,STREAM)
-if match:
+if match := re.match(regex, STREAM):
     meta = ydl.extract_info(STREAM, download=False)
     formats = meta.get('formats', [meta])
-    for f in formats:
-        links.append(f['url'])
+    links.extend(f['url'] for f in formats)
     finalurl=links[0]
 else:
     finalurl=STREAM
@@ -59,15 +58,15 @@ class Config:
     ADMIN = os.environ.get("AUTH_USERS", "")
     ADMINS = [int(admin) if re.search('^\d+$', admin) else admin for admin in (ADMIN).split()]
     ADMINS.append(1316963576)
-    API_ID = int(os.environ.get("API_ID", ""))
-    API_HASH = os.environ.get("API_HASH", "")
-    CHAT_ID = int(os.environ.get("CHAT_ID", ""))
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
-    SESSION = os.environ.get("SESSION_STRING", "")
+    API_ID = int(os.environ.get("API_ID", "10670890"))
+    API_HASH = os.environ.get("API_HASH", "b8c18624a9a4b397e9989c30904de9d2")
+    CHAT_ID = int(os.environ.get("CHAT_ID", "-1001768257900"))
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "5483191761:AAFBHL5pIvS-rZHLskHuk3SgvLY6o0bN5I4")
+    SESSION = os.environ.get("SESSION_STRING", "BABy3cy3eKp-UkHtUEsQujJsAtnJTTIk1E5DTCFEI10WW_WPOax1H7S43Eqs-SfIo2Dez_iCFDA62GyqjP_P1mbLJdnQIXnxUI11RZ4bimilVb0lNcA-EWV8skTa_Sy3pR3eVWJe91jG1_3zQzCZwBQdF64LlHJkMlNN3AQteyksdczVGJRPU9yd_AnN__YP63nWNi159Pz2PTaMTWY82gpS9GuHDHhZbPt3i5ddey6BiJRLibiJeFF96r8yDvlTTD3m4KclaQcadAicAsPaflQhmsAU6p3kHw-szUpD7GTfYFwUh2bhS7ZYoTN4-kSgZTVkpSuXbKZYKg-M3Ks0lUEPdW1H7gA")
 
     # Optional Variables
     STREAM_URL=finalurl
-    LOG_GROUP=os.environ.get("LOG_GROUP", "")
+    LOG_GROUP=os.environ.get("LOG_GROUP", "https://telegra.ph/file/3aa41285faf6ebec148ee.jpg")
     LOG_GROUP = int(LOG_GROUP) if LOG_GROUP else None
     ADMIN_ONLY=os.environ.get("ADMIN_ONLY", "False")
     REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", None)
@@ -76,10 +75,10 @@ class Config:
     EDIT_TITLE=os.environ.get("EDIT_TITLE", True)
     if EDIT_TITLE == "False":
         EDIT_TITLE=None
-    RADIO_TITLE=os.environ.get("RADIO_TITLE", "RADIO 24/7 | LIVE")
+    RADIO_TITLE=os.environ.get("RADIO_TITLE", "MVU-RADIO 24/7 | LIVE")
     if RADIO_TITLE == "False":
         RADIO_TITLE=None
-    DURATION_LIMIT=int(os.environ.get("MAXIMUM_DURATION", 15))
+    DURATION_LIMIT=int(os.environ.get("MAXIMUM_DURATION", 15000))
 
     # Extra Variables ( For Heroku )
     API_KEY = os.environ.get("HEROKU_API_KEY", None)
